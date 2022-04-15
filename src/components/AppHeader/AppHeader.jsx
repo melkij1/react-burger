@@ -9,20 +9,20 @@ import styles from "./AppHeader.module.css";
 import AppMenuItem from "../AppMenuItem/AppMenuItem";
 function AppHeader() {
   return (
-    <div className={`${styles.header} pt-4 pb-4`}>
+    <header className={`${styles.header} pt-4 pb-4`}>
       <div className="container">
-        <div className={styles.headerWrap}>
-          <div className={styles.headerMenuList}>
+        <nav className={styles.headerWrap}>
+          <ul className={styles.headerMenuList}>
             <AppMenuItem title="Конструктор" Icon={BurgerIcon} />
             <AppMenuItem title="Лента заказов" Icon={ListIcon} />
-          </div>
+          </ul>
           <div className={styles.headerLogo}>
             <Logo />
           </div>
           <AppMenuItem title="Личный кабинет" Icon={ProfileIcon} />
-        </div>
+        </nav>
       </div>
-    </div>
+    </header>
   );
 }
 
