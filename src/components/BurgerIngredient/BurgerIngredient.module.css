@@ -1,0 +1,14 @@
+.burgerItem {
+  max-width: 272px;
+  position: relative;
+}
+
+.burderItemPrice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.burderItemPrice span {
+  margin-right: 9px;
+}

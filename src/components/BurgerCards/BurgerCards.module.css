@@ -1,0 +1,28 @@
+.burgerCards {
+  margin-top: 56px;
+}
+
+.burgerWrapper {
+  max-height: 656px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.burgerCard {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.burderCardIcon {
+  margin-right: 8px;
+}
+
+.burgerTotalPrice {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.price span {
+  margin-right: 9.5px;
+}

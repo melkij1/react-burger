@@ -1,0 +1,21 @@
+.header {
+  position: relative;
+  background: var(--background);
+}
+
+.headerWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerLogo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.headerMenuList {
+  display: flex;
+}

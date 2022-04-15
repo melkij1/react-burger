@@ -1,0 +1,8 @@
+.burgerItems {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 756px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-right: 7px;
+}
