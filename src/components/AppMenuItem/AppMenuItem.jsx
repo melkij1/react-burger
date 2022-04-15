@@ -1,10 +1,13 @@
 import React from "react";
+import classNames from "classnames/bind";
 import styles from "./AppMenuItem.module.css";
 function AppMenuItem({ title, Icon }) {
   return (
-    <div className={styles.headerMenuItem}>
-      <Icon />
-      <span>{title}</span>
+    <div className={classNames(styles.headerMenuItem, "pt-4 pb-4 pl-5 pr-5")}>
+      <div className={classNames(styles.headerMenuItemIcon, "mr-2")}>
+        <Icon />
+      </div>
+      <span className="text text_type_main-default">{title}</span>
     </div>
   );
 }
