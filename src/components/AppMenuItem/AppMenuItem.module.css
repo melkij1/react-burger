@@ -1,0 +1,18 @@
+.headerMenuItem {
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+.headerMenuItem span {
+  cursor: pointer;
+  display: inline-block;
+}
+.headerMenuItem:hover svg {
+  fill: #8585ad;
+}
+.headerMenuItemIcon {
+  max-height: 24px;
+}
+.headerMenuItem span:hover {
+  color: #8585ad;
+}
