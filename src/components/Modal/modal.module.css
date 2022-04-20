@@ -6,8 +6,13 @@
     0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
     0px 0px 1px rgba(0, 0, 0, 0.04);
   border-radius: 40px;
-  z-index: 1;
-  position: relative;
+  /* z-index: 1; */
+  /* position: relative; */
+  z-index: 9999;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  left: 50%;
 }
 
 .modalContentIngredient {

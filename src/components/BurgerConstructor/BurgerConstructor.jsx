@@ -52,8 +52,8 @@ export default function BurgerCards({ orders }) {
             {firstBul && (
               <div className={classNames(styles.burgerCard, "pr-4")}>
                 <ConstructorElement
-                  type={firstBul.position}
-                  isLocked={firstBul.locker}
+                  type="top"
+                  isLocked={true}
                   text={handlerName(firstBul.name, firstBul.position)}
                   price={firstBul.price}
                   thumbnail={firstBul.image}
@@ -92,7 +92,7 @@ export default function BurgerCards({ orders }) {
               <div className={classNames(styles.burgerCard, "pr-4")}>
                 <ConstructorElement
                   type="bottom"
-                  isLocked={firstBul.locker}
+                  isLocked={true}
                   text={handlerName(firstBul.name, firstBul.position)}
                   price={firstBul.price}
                   thumbnail={firstBul.image}

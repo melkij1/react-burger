@@ -9,10 +9,13 @@ import { fetchRequest } from "../../api/index";
 import { ingredientType } from "../../types/index";
 function App() {
   const [data, setData] = useState<typeof ingredientType[]>([]);
+  const [error, setError] = useState(false);
   const fetchData = useCallback(async () => {
     const res = await fetchRequest("/ingredients");
-    if (res) {
+    if (res && res.data) {
       setData([...data, ...res.data]);
+    } else {
+      setError(true);
     }
   }, []);
   useEffect(() => {
@@ -21,8 +24,18 @@ function App() {
 
   return (
     <div className="App">
-      <AppHeader />
-      <Main items={data} orders={data} />
+      {error ? (
+        <div className="error-App">
+          <p className="text text_type_main-large">
+            Произошла ошибка, при получении данных
+          </p>
+        </div>
+      ) : (
+        <>
+          <AppHeader />
+          <Main items={data} orders={data} />
+        </>
+      )}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 import IconSuccess from "../Icons/IconSuccess";
 import styles from "./orderDetails.module.css";
 OrderDetails.propTypes = {
-  item: PropTypes.string,
+  item: PropTypes.number.isRequired,
 };
 function OrderDetails({ item }) {
   return (
