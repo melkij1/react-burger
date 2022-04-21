@@ -1,6 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import styles from "./AppMenuItem.module.css";
+AppMenuItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  Icon: PropTypes.elementType,
+};
 function AppMenuItem({ title, Icon }) {
   return (
     <li className={classNames(styles.headerMenuItem, "pt-4 pb-4 pl-5 pr-5")}>

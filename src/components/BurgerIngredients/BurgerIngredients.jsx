@@ -32,6 +32,7 @@ function BurgerIngredients({ items }) {
     }
     typesIngredient[type].push(item);
   });
+
   return (
     <div className="col">
       <div className="flex">

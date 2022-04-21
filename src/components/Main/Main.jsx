@@ -1,6 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
+import { ingredientType } from "../../types/index";
+Main.propTypes = {
+  items: PropTypes.arrayOf(ingredientType).isRequired,
+  orders: PropTypes.arrayOf(ingredientType).isRequired,
+};
 export default function Main({ items, orders }) {
   return (
     <div className="container mb-10">

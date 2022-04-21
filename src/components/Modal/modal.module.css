@@ -1,0 +1,58 @@
+.modal {
+  background: #1c1c21;
+  border: 1px solid rgba(76, 76, 255, 0.2);
+  box-sizing: border-box;
+  box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
+    0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 40px;
+  /* z-index: 1; */
+  /* position: relative; */
+  z-index: 9999;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  left: 50%;
+}
+
+.modalContentIngredient {
+  min-width: 640px;
+}
+
+.modalCloseButton {
+  background: transparent;
+  border: none;
+  outline: none;
+  position: absolute;
+  right: 40px;
+  cursor: pointer;
+}
+.modalContentWrap {
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.modalContentTitle {
+  text-align: center;
+}
+.modalContentItems {
+  display: flex;
+  justify-content: center;
+}
+.modalContentItem {
+  color: #8585ad;
+}
+.modalContentItem span {
+  margin-bottom: 8px;
+  display: block;
+}
+
+.modalContentItem .value {
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 24px;
+  font-family: "Iceland";
+  display: block;
+  text-align: center;
+}
