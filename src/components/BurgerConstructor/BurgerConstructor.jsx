@@ -1,25 +1,35 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext, useEffect } from "react";
+import { AppContext } from "../../services/appContext";
 import {
   ConstructorElement,
   DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import Modal from "../Modal/Modal";
+import Loader from "../Icons/Loader";
 import styles from "./BurgerConstructor.module.css";
-import { orderType } from "../../types/index";
 import classNames from "classnames/bind";
-import OrderDetails from "../OrderDetails/OrderDetails";
-BurgerCards.propTypes = {
-  orders: PropTypes.arrayOf(orderType).isRequired,
-};
-
-export default function BurgerCards({ orders }) {
-  const [orderNumber, setOrderNumber] = useState(0);
-  const [show, setShow] = useState(false);
-
-  const totalPrice = orders.reduce((acc, val) => acc + val.price, 0);
+import { fetchPost } from "../../api/index";
+export default function BurgerCards() {
+  const { state, dispatch } = useContext(AppContext);
+  const [loader, setLoader] = useState(false);
+  const [hasDisabled, setHasDisabled] = useState(false);
+  const { burderConstructor, totalPrice } = state;
+  const { bun, ingredients } = burderConstructor;
+  const bunItem = bun?.[0];
+  useEffect(() => {
+    const bunPrice = bun[0]?.price * 2 || 0;
+    const ingredientsPrices = ingredients?.reduce(
+      (acc, val) => acc + val.price,
+      0
+    );
+    dispatch({ type: "setPrice", payload: bunPrice + ingredientsPrices });
+    if (!bunItem) {
+      setHasDisabled(true);
+    } else {
+      setHasDisabled(false);
+    }
+  }, [bun, ingredients, dispatch]);
 
   const handlerName = (name, type) => {
     if (type) {
@@ -32,31 +42,54 @@ export default function BurgerCards({ orders }) {
     return name;
   };
 
-  const firstBul = orders[0];
-  //TODO: оставляю на редакс
-  // const lastBul = orders[orders.length - 1];
-  const otherBul = orders.filter((x, i) => i > 0 && i < orders.length - 1);
+  const removeItem = (item, index) => {
+    if (item.__v > 0) {
+      item.__v = item.__v - 1;
+    }
+    dispatch({
+      type: "removeIngredient",
+      payload: index,
+    });
+  };
 
-  const openModal = e => {
-    //Эмулируем запросы, якобы получаем данные и сохраняем номер заказа
-    setTimeout(() => {
-      setOrderNumber(orderNumber + 34536);
-      setShow(true);
-    }, 500);
+  const orderAdd = async () => {
+    setLoader(true);
+
+    const bunId = bunItem._id;
+    const ingredientsId = ingredients.map(x => x._id);
+    const ingredientsData = [bunId, ...ingredientsId, bunId];
+
+    await fetchPost("/orders", ingredientsData)
+      .then(response => {
+        setLoader(false);
+        const { success, order } = response;
+        if (success && order) {
+          dispatch({ type: "setOrder", payload: order?.number });
+          dispatch({
+            type: "openModal",
+            payload: { modalIsOpen: true, mode: "orderDetails" },
+          });
+          dispatch({ type: "clearIngredientsSelecteds" });
+        }
+      })
+      .catch(err => {
+        setLoader(false);
+        console.error("Не получилось оформить заказ");
+      });
   };
   return (
     <>
       <div className="col">
         <div className={styles.burgerCards}>
           <div className={styles.BurgerConstructorsWrapper}>
-            {firstBul && (
+            {bunItem && (
               <div className={classNames(styles.burgerCard, "pr-4")}>
                 <ConstructorElement
                   type="top"
                   isLocked={true}
-                  text={handlerName(firstBul.name, firstBul.position)}
-                  price={firstBul.price}
-                  thumbnail={firstBul.image}
+                  text={handlerName(bunItem.name, "top")}
+                  price={bunItem.price}
+                  thumbnail={bunItem.image}
                 />
               </div>
             )}
@@ -67,8 +100,8 @@ export default function BurgerCards({ orders }) {
                 "pr-2"
               )}
             >
-              {otherBul &&
-                otherBul.map((item, index) => {
+              {ingredients &&
+                ingredients.map((item, index) => {
                   return (
                     <div
                       className={styles.burgerCard}
@@ -83,19 +116,20 @@ export default function BurgerCards({ orders }) {
                         text={handlerName(item.name, item.position)}
                         price={item.price}
                         thumbnail={item.image}
+                        handleClose={() => removeItem(item, index)}
                       />
                     </div>
                   );
                 })}
             </div>
-            {firstBul && (
+            {bunItem && (
               <div className={classNames(styles.burgerCard, "pr-4")}>
                 <ConstructorElement
                   type="bottom"
                   isLocked={true}
-                  text={handlerName(firstBul.name, firstBul.position)}
-                  price={firstBul.price}
-                  thumbnail={firstBul.image}
+                  text={handlerName(bunItem.name, "bottom")}
+                  price={bunItem.price}
+                  thumbnail={bunItem.image}
                 />
               </div>
             )}
@@ -111,16 +145,18 @@ export default function BurgerCards({ orders }) {
             <span>{totalPrice}</span>
             <CurrencyIcon type="primary" />
           </div>
-          <div className="button">
-            <Button type="primary" size="medium" onClick={openModal}>
-              Оформить заказ
+          <div className={styles.button_wrapper}>
+            <Button
+              type="primary"
+              size="medium"
+              onClick={orderAdd}
+              disabled={hasDisabled}
+            >
+              {loader ? <Loader /> : "Оформить заказ"}
             </Button>
           </div>
         </div>
       </div>
-      <Modal show={show} onClose={() => setShow(false)}>
-        <OrderDetails item={orderNumber} />
-      </Modal>
     </>
   );
 }

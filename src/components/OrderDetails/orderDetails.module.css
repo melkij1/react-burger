@@ -9,3 +9,9 @@
 .textDark {
   color: var(--text-inactive-color);
 }
+
+.appButton {
+  transition-property: color, opacity, background-color, border-color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}

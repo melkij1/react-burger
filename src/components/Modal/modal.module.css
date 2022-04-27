@@ -9,7 +9,7 @@
   /* z-index: 1; */
   /* position: relative; */
   z-index: 9999;
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translateY(-50%) translateX(-50%);
   left: 50%;
@@ -54,5 +54,11 @@
   line-height: 24px;
   font-family: "Iceland";
   display: block;
+  text-align: center;
+}
+
+.modalContentBottom {
+  display: block;
+  margin-top: 25px;
   text-align: center;
 }
