@@ -1,17 +1,19 @@
-import React, { useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../services/appContext";
-import PropTypes from "prop-types";
 import {
   ConstructorElement,
   DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import Loader from "../Icons/Loader";
 import styles from "./BurgerConstructor.module.css";
 import classNames from "classnames/bind";
 import { fetchPost } from "../../api/index";
 export default function BurgerCards() {
   const { state, dispatch } = useContext(AppContext);
+  const [loader, setLoader] = useState(false);
+  const [hasDisabled, setHasDisabled] = useState(false);
   const { burderConstructor, totalPrice } = state;
   const { bun, ingredients } = burderConstructor;
   const bunItem = bun?.[0];
@@ -22,6 +24,11 @@ export default function BurgerCards() {
       0
     );
     dispatch({ type: "setPrice", payload: bunPrice + ingredientsPrices });
+    if (!bunItem) {
+      setHasDisabled(true);
+    } else {
+      setHasDisabled(false);
+    }
   }, [bun, ingredients, dispatch]);
 
   const handlerName = (name, type) => {
@@ -46,19 +53,29 @@ export default function BurgerCards() {
   };
 
   const orderAdd = async () => {
+    setLoader(true);
+
     const bunId = bunItem._id;
     const ingredientsId = ingredients.map(x => x._id);
     const ingredientsData = [bunId, ...ingredientsId, bunId];
-    const response = await fetchPost("/orders", ingredientsData);
-    if (response) {
-      if (response.success) {
-        dispatch({ type: "setOrder", payload: response.order.number });
-        dispatch({
-          type: "openModal",
-          payload: { modalIsOpen: true, mode: "orderDetails" },
-        });
-      }
-    }
+
+    await fetchPost("/orders", ingredientsData)
+      .then(response => {
+        setLoader(false);
+        const { success, order } = response;
+        if (success && order) {
+          dispatch({ type: "setOrder", payload: order?.number });
+          dispatch({
+            type: "openModal",
+            payload: { modalIsOpen: true, mode: "orderDetails" },
+          });
+          dispatch({ type: "clearIngredientsSelecteds" });
+        }
+      })
+      .catch(err => {
+        setLoader(false);
+        console.error("Не получилось оформить заказ");
+      });
   };
   return (
     <>
@@ -128,9 +145,14 @@ export default function BurgerCards() {
             <span>{totalPrice}</span>
             <CurrencyIcon type="primary" />
           </div>
-          <div className="button">
-            <Button type="primary" size="medium" onClick={orderAdd}>
-              Оформить заказ
+          <div className={styles.button_wrapper}>
+            <Button
+              type="primary"
+              size="medium"
+              onClick={orderAdd}
+              disabled={hasDisabled}
+            >
+              {loader ? <Loader /> : "Оформить заказ"}
             </Button>
           </div>
         </div>

@@ -8,7 +8,6 @@ export const appReducer = (state, action) => {
         ingredientSelect: action.payload,
       };
     case "setBun":
-      console.log(action);
       return {
         ...state,
         burderConstructor: {
@@ -32,6 +31,19 @@ export const appReducer = (state, action) => {
           ingredients: state.burderConstructor.ingredients.filter(
             (x, idx) => idx !== action.payload
           ),
+        },
+      };
+    case "clearIngredientsSelecteds":
+      const ingredients = state.ingredients.map(x => ({
+        ...x,
+        ...(x.__v = 0),
+      }));
+      return {
+        ...state,
+        ingredients,
+        burderConstructor: {
+          bun: [],
+          ingredients: [],
         },
       };
     case "setOrder":

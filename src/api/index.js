@@ -1,17 +1,9 @@
 import { BASE_URL } from "../utils/constans";
 export const fetchRequest = async api => {
     const url = `${BASE_URL}${api}`;
-    return await fetch(url)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        return Promise.reject(response.status);
-      })
-      .catch(error => console.error(error));
+    return await fetch(url).then(checkResponse);
   },
   fetchPost = async (api, body) => {
-    console.log(body, "body");
     const url = `${BASE_URL}${api}`;
     return await fetch(url, {
       method: "POST",
@@ -24,12 +16,12 @@ export const fetchRequest = async api => {
       body: JSON.stringify({
         ingredients: body,
       }),
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        return Promise.reject(response.status);
-      })
-      .catch(error => console.error(error));
+    }).then(checkResponse);
   };
+
+const checkResponse = res => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(res.status);
+};

@@ -38,3 +38,7 @@
 .price span {
   margin-right: 9.5px;
 }
+.button_wrapper button {
+  min-width: 214px;
+  max-height: 65px;
+}

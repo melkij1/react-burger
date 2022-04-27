@@ -26,53 +26,55 @@ const initialState = {
 function App() {
   const [state, dispatch] = useReducer(appReducer, initialState, undefined);
   const fetchData = useCallback(async () => {
-    const res = await fetchRequest("/ingredients");
-    if (res && res.data) {
-      dispatch({ type: "setIngredietns", payload: res.data });
-    } else {
-      dispatch({ type: "setError", payload: true });
-    }
+    await fetchRequest("/ingredients")
+      .then(response => {
+        const { data, success } = response;
+        if (success && data) {
+          dispatch({ type: "setIngredietns", payload: data });
+        }
+      })
+      .catch(error => {
+        dispatch({ type: "setError", payload: true });
+      });
   }, []);
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return (
-    <>
-      <AppContext.Provider
-        value={{
-          state,
-          dispatch,
-        }}
+    <AppContext.Provider
+      value={{
+        state,
+        dispatch,
+      }}
+    >
+      <div className="App">
+        {state.error ? (
+          <div className="error-App">
+            <p className="text text_type_main-large">
+              Произошла ошибка, при получении данных
+            </p>
+          </div>
+        ) : (
+          <>
+            <AppHeader />
+            <Main />
+          </>
+        )}
+      </div>
+      <Modal
+        show={state.modalIsOpen && state.modalMode === "IngredientDetails"}
+        onClose={() => dispatch({ type: "closeModal" })}
       >
-        <div className="App">
-          {state.error ? (
-            <div className="error-App">
-              <p className="text text_type_main-large">
-                Произошла ошибка, при получении данных
-              </p>
-            </div>
-          ) : (
-            <>
-              <AppHeader />
-              <Main />
-            </>
-          )}
-        </div>
-        <Modal
-          show={state.modalIsOpen && state.modalMode === "IngredientDetails"}
-          onClose={() => dispatch({ type: "closeModal" })}
-        >
-          <IngredientDetails item={state.ingredientSelect} />
-        </Modal>
-        <Modal
-          show={state.modalIsOpen && state.modalMode === "orderDetails"}
-          onClose={() => dispatch({ type: "closeModal" })}
-        >
-          <OrderDetails item={state.orderNumber} />
-        </Modal>
-      </AppContext.Provider>
-    </>
+        <IngredientDetails item={state.ingredientSelect} />
+      </Modal>
+      <Modal
+        show={state.modalIsOpen && state.modalMode === "orderDetails"}
+        onClose={() => dispatch({ type: "closeModal" })}
+      >
+        <OrderDetails item={state.orderNumber} />
+      </Modal>
+    </AppContext.Provider>
   );
 }
 

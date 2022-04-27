@@ -15,7 +15,7 @@ function Modal({ show, children, onClose }) {
   const overlayRef = useRef(null);
   useHiddenScrollBody(show);
   const closeOnEsc = e => {
-    if ((e.charCode || e.keyCode) === 27) {
+    if (e.key === "Escape") {
       onClose();
     }
   };
