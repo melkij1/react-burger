@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import {
   Counter,
@@ -6,17 +6,19 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames/bind";
 import { ingredientType } from "../../types/index";
-import Modal from "../Modal/Modal";
-import IngredientDetails from "../IngredientDetails/IngredientDetails";
+import { AppContext } from "../../services/appContext";
 import styles from "./BurgerIngredient.module.css";
 BurgerIngredient.propTypes = {
   ingredient: ingredientType,
 };
 export default function BurgerIngredient({ ingredient }) {
-  const [show, setShow] = useState(false);
-
-  const openModal = e => {
-    setShow(true);
+  const { dispatch } = useContext(AppContext);
+  const openModal = () => {
+    dispatch({ type: "setIngredietnSelect", payload: ingredient });
+    dispatch({
+      type: "openModal",
+      payload: { modalIsOpen: true, mode: "IngredientDetails" },
+    });
   };
   return (
     <>
@@ -25,7 +27,13 @@ export default function BurgerIngredient({ ingredient }) {
         onClick={openModal}
       >
         <div className="pl-4 pr-4">
-          <Counter count={1} size="default" className="burderCount" />
+          {ingredient.__v > 0 && (
+            <Counter
+              count={ingredient.__v}
+              size="default"
+              className="burderCount"
+            />
+          )}
 
           <img src={ingredient.image} alt="" className="mb-1" />
           <div className={classNames(styles.burderItemPrice, "mb-1")}>
@@ -39,9 +47,6 @@ export default function BurgerIngredient({ ingredient }) {
           </div>
         </div>
       </div>
-      <Modal show={show} onClose={() => setShow(false)}>
-        <IngredientDetails item={ingredient} />
-      </Modal>
     </>
   );
 }

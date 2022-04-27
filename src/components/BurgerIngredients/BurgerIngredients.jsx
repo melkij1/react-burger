@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AppContext } from "../../services/appContext";
 import PropTypes from "prop-types";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames/bind";
 import styles from "./BurgerIngredients.module.css";
 import BurgerIngredientSection from "../BurgerIngredientSection/BurgerIngredientSection";
 import { ingredientType } from "../../types/index";
-BurgerIngredients.propTypes = {
-  items: PropTypes.arrayOf(ingredientType).isRequired,
-};
-function BurgerIngredients({ items }) {
+
+function BurgerIngredients() {
+  const { state } = useContext(AppContext);
+  const { ingredients } = state;
   const ingredientTypeTitles = {
     bun: "Булки",
     sauce: "Соусы",
@@ -16,7 +17,7 @@ function BurgerIngredients({ items }) {
   };
 
   const [current, setCurrent] = useState("bun");
-  const sortItems = items.sort((a, b) => {
+  const sortItems = ingredients.sort((a, b) => {
     if (a.type === "bun" && b.type !== "bun") {
       return -1;
     } else if (a.type === "sauce" && b.type !== "sauce") {

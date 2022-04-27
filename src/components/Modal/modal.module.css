@@ -56,3 +56,9 @@
   display: block;
   text-align: center;
 }
+
+.modalContentBottom {
+  display: block;
+  margin-top: 25px;
+  text-align: center;
+}
