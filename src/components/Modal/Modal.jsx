@@ -35,6 +35,7 @@ function Modal({ show, children, onClose }) {
     return () => {
       document.body.removeEventListener("keydown", closeOnEsc);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ function Modal({ show, children, onClose }) {
       document.removeEventListener("mousedown", onOutside);
       document.removeEventListener("touchstart", onOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show, overlayRef]);
 
   return (

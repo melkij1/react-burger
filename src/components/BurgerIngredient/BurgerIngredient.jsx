@@ -1,22 +1,31 @@
-import React, { useContext } from "react";
-import PropTypes from "prop-types";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { useDrag } from "react-dnd";
 import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames/bind";
 import { ingredientType } from "../../types/index";
-import { AppContext } from "../../services/appContext";
+import { INGREDIENTS_SELECTED } from "../../services/actions/ingredients-actions";
+import { OPENMODAL } from "../../services/actions/modal-actions";
 import styles from "./BurgerIngredient.module.css";
 BurgerIngredient.propTypes = {
   ingredient: ingredientType,
 };
 export default function BurgerIngredient({ ingredient }) {
-  const { dispatch } = useContext(AppContext);
+  const dispatch = useDispatch();
+  const [{ opacity }, dragIngredient] = useDrag({
+    type: "ingredient-card",
+    item: { id: ingredient._id },
+    collect: monitor => ({
+      opacity: monitor.isDragging() ? 0.5 : 1,
+    }),
+  });
   const openModal = () => {
-    dispatch({ type: "setIngredietnSelect", payload: ingredient });
+    dispatch({ type: INGREDIENTS_SELECTED, payload: ingredient });
     dispatch({
-      type: "openModal",
+      type: OPENMODAL,
       payload: { modalIsOpen: true, mode: "IngredientDetails" },
     });
   };
@@ -25,6 +34,8 @@ export default function BurgerIngredient({ ingredient }) {
       <div
         className={classNames(styles.burgerItem, "mb-8")}
         onClick={openModal}
+        ref={dragIngredient}
+        styles={{ opacity }}
       >
         <div className="pl-4 pr-4">
           {ingredient.__v > 0 && (
