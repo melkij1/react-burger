@@ -1,4 +1,4 @@
-import { SET_ORDER, SET_LOADER } from "../actions/order-actions";
+import { SET_ORDER, SET_LOADER } from "../actions/order/types";
 const initialState = {
   orderNumber: 0,
   loader: false,
@@ -7,6 +7,7 @@ const initialState = {
 export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case SET_ORDER:
+      console.log(action.payload);
       return {
         ...state,
         orderNumber: action.payload,

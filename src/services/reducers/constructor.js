@@ -6,7 +6,8 @@ import {
   CLEAR_CONSTRUCTOR,
   REMOVE_BUN,
   SORT_INGREDIENT,
-} from "../actions/constructor-actions";
+} from "../actions/constructor/types";
+
 import { sortArray } from "../../helpers";
 const initialState = {
   burderConstructor: {

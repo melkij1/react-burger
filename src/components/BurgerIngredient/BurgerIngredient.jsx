@@ -1,20 +1,18 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useDrag } from "react-dnd";
+import { useActions } from "../../hooks/useActions";
 import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import classNames from "classnames/bind";
 import { ingredientType } from "../../types/index";
-import { INGREDIENTS_SELECTED } from "../../services/actions/ingredients-actions";
-import { OPENMODAL } from "../../services/actions/modal-actions";
 import styles from "./BurgerIngredient.module.css";
 BurgerIngredient.propTypes = {
-  ingredient: ingredientType,
+  ingredient: ingredientType.isRequired,
 };
 export default function BurgerIngredient({ ingredient }) {
-  const dispatch = useDispatch();
+  const { setIngredientSelected, openModalAction } = useActions();
   const [{ opacity }, dragIngredient] = useDrag({
     type: "ingredient-card",
     item: { id: ingredient._id },
@@ -23,11 +21,8 @@ export default function BurgerIngredient({ ingredient }) {
     }),
   });
   const openModal = () => {
-    dispatch({ type: INGREDIENTS_SELECTED, payload: ingredient });
-    dispatch({
-      type: OPENMODAL,
-      payload: { modalIsOpen: true, mode: "IngredientDetails" },
-    });
+    setIngredientSelected(ingredient);
+    openModalAction({ modalIsOpen: true, mode: "IngredientDetails" });
   };
   return (
     <>

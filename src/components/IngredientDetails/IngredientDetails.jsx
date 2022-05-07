@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 import { ingredientType } from "../../types/index";
 
 IngredientDetails.propTypes = {
-  item: ingredientType,
+  item: ingredientType.isRequired,
 };
 export default function IngredientDetails({ item }) {
   return (

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
+import { v4 as uuidv4 } from "uuid";
+import { useActions } from "../../hooks/useActions";
 import {
   ConstructorElement,
   DragIcon,
@@ -11,14 +13,15 @@ import BurgerConstructorItem from "../BurgerConstructorItem/BurgerConstructorIte
 import Loader from "../Icons/Loader";
 import styles from "./BurgerConstructor.module.css";
 import classNames from "classnames/bind";
-import {
-  SET_PRICE,
-  REMOVE_INGREDIENT,
-  SORT_INGREDIENT,
-} from "../../services/actions/constructor-actions";
-import { SET_LOADER, getOrder } from "../../services/actions/order-actions";
 export default function BurgerCards({ onDropHandler }) {
   const dispatch = useDispatch();
+  const {
+    setPrice,
+    removeIngredient,
+    sortIngredientActions,
+    getOrder,
+    setIsLoader,
+  } = useActions();
   const { burderConstructor, totalPrice } = useSelector(
     state => state.burgerState
   );
@@ -40,12 +43,13 @@ export default function BurgerCards({ onDropHandler }) {
       (acc, val) => acc + val.price,
       0
     );
-    dispatch({ type: SET_PRICE, payload: bunPrice + ingredientsPrices });
+    setPrice(bunPrice + ingredientsPrices);
     if (!bunItem) {
       setHasDisabled(true);
     } else {
       setHasDisabled(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bun, ingredients, dispatch, bunItem]);
 
   const handlerName = (name, type) => {
@@ -63,17 +67,16 @@ export default function BurgerCards({ onDropHandler }) {
     if (item.__v > 0) {
       item.__v = item.__v - 1;
     }
-    dispatch({ type: REMOVE_INGREDIENT, payload: index });
+    removeIngredient(index);
   };
 
   const orderAdd = async () => {
-    dispatch({ type: SET_LOADER, payload: true });
+    setIsLoader(true);
 
     const bunId = bunItem._id;
     const ingredientsId = ingredients.map(x => x._id);
     const ingredientsData = [bunId, ...ingredientsId, bunId];
-
-    await dispatch(getOrder(ingredientsData));
+    await getOrder(ingredientsData);
   };
 
   const findIngredient = useCallback(
@@ -89,8 +92,9 @@ export default function BurgerCards({ onDropHandler }) {
   );
   const sortIngredient = useCallback(
     (index, atIndex) => {
-      dispatch({ type: SORT_INGREDIENT, payload: { index, atIndex } });
+      sortIngredientActions({ index, atIndex });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
   );
   return (
@@ -124,7 +128,7 @@ export default function BurgerCards({ onDropHandler }) {
                 ingredients.map((item, index) => {
                   return (
                     <BurgerConstructorItem
-                      key={`${item._id + index}_${index}`}
+                      key={uuidv4()}
                       id={item._id}
                       ingredientsIndex={index}
                       findIngredient={findIngredient}
@@ -141,7 +145,6 @@ export default function BurgerCards({ onDropHandler }) {
                         thumbnail={item.image}
                         handleClose={() => removeItem(item, index)}
                       />
-                      {/* </div> */}
                     </BurgerConstructorItem>
                   );
                 })}

@@ -7,9 +7,9 @@ import classNames from "classnames/bind";
 import { useHiddenScrollBody } from "../../hooks/useHiddenScrollBody";
 import styles from "./modal.module.css";
 Modal.propTypes = {
-  show: PropTypes.bool,
-  children: PropTypes.node,
-  onClose: PropTypes.func,
+  show: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 function Modal({ show, children, onClose }) {
   const overlayRef = useRef(null);

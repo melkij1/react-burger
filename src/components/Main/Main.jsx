@@ -1,16 +1,10 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-// import { DndProvider } from "react-dnd";
-// import { HTML5Backend } from "react-dnd-html5-backend";
+import { useSelector } from "react-redux";
+import { useActions } from "../../hooks/useActions";
 import BurgerIngredients from "../BurgerIngredients/BurgerIngredients";
 import BurgerConstructor from "../BurgerConstructor/BurgerConstructor";
-import {
-  SET_BUN,
-  SET_INGREDIENT,
-  REMOVE_BUN,
-} from "../../services/actions/constructor-actions";
 export default function Main() {
-  const dispatch = useDispatch();
+  const { setBun, setIngredient, removeBun } = useActions();
   const { ingredients } = useSelector(state => state.ingredientsState);
   const { burderConstructor } = useSelector(state => state.burgerState);
   const { bun } = burderConstructor;
@@ -19,22 +13,15 @@ export default function Main() {
     if (item) {
       if (bun.length === 1 && item.type === "bun") {
         bun[0].__v = 0;
-        dispatch({ type: REMOVE_BUN });
-      } else {
-        item.__v = item.__v + 1;
+        removeBun();
       }
+      item.__v = item.__v + 1;
       if (item.type === "bun") {
-        dispatch({ type: SET_BUN, payload: item });
+        setBun(item);
       } else {
-        dispatch({ type: SET_INGREDIENT, payload: item });
+        setIngredient(item);
       }
     }
-
-    // dispatch(
-    //   addIngredient(
-    //     ingredients.find((ingredient) => ingredient._id === itemId.id)
-    //   )
-    // );
   };
   return (
     <div className="container mb-10">
@@ -42,10 +29,8 @@ export default function Main() {
         Соберите бургер
       </h1>
       <div className="row">
-        {/* <DndProvider backend={HTML5Backend}> */}
         <BurgerIngredients />
         <BurgerConstructor onDropHandler={handleDrop} />
-        {/* </DndProvider> */}
       </div>
     </div>
   );

@@ -3,12 +3,17 @@ import {
   INGREDIENTS_ERROR,
   INGREDIENTS_SELECTED,
   CLEAR_INGREDIENTS_SELECTEDS,
-} from "../actions/ingredients-actions";
+} from "../actions/ingredients/types";
 
 const initialState = {
   ingredients: [],
   ingredientSelect: {},
   error: false,
+};
+
+const clearIngredientsSelecteds = arr => {
+  arr.forEach(x => (x.__v = 0));
+  return arr;
 };
 
 export default function ingredientsReducer(state = initialState, action) {
@@ -20,13 +25,9 @@ export default function ingredientsReducer(state = initialState, action) {
     case INGREDIENTS_SELECTED:
       return { ...state, ingredientSelect: action.payload };
     case CLEAR_INGREDIENTS_SELECTEDS:
-      const ingredients = [...state.ingredients].map(x => ({
-        ...x,
-        ...(x.__v = 0),
-      }));
       return {
         ...state,
-        ingredients,
+        ingredients: clearIngredientsSelecteds(state.ingredients),
       };
     default:
       return state;
