@@ -7,7 +7,6 @@ const initialState = {
 export default function orderReducer(state = initialState, action) {
   switch (action.type) {
     case SET_ORDER:
-      console.log(action.payload);
       return {
         ...state,
         orderNumber: action.payload,

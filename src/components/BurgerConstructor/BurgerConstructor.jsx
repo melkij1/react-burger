@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
-import { v4 as uuidv4 } from "uuid";
 import { useActions } from "../../hooks/useActions";
 import {
   ConstructorElement,
@@ -24,6 +23,9 @@ export default function BurgerCards({ onDropHandler }) {
   } = useActions();
   const { burderConstructor, totalPrice } = useSelector(
     state => state.burgerState
+  );
+  const { ingredients: ingredientsState } = useSelector(
+    state => state.ingredientsState
   );
   const { loader } = useSelector(state => state.orderState);
   const [hasDisabled, setHasDisabled] = useState(false);
@@ -64,8 +66,9 @@ export default function BurgerCards({ onDropHandler }) {
   };
 
   const removeItem = (item, index) => {
-    if (item.__v > 0) {
-      item.__v = item.__v - 1;
+    const findItem = ingredientsState.find(x => x._id === item._id);
+    if (findItem && findItem.__v > 0) {
+      findItem.__v = findItem.__v - 1;
     }
     removeIngredient(index);
   };
@@ -128,7 +131,7 @@ export default function BurgerCards({ onDropHandler }) {
                 ingredients.map((item, index) => {
                   return (
                     <BurgerConstructorItem
-                      key={uuidv4()}
+                      key={item.uuid}
                       id={item._id}
                       ingredientsIndex={index}
                       findIngredient={findIngredient}

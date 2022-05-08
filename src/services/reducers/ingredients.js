@@ -24,6 +24,8 @@ export default function ingredientsReducer(state = initialState, action) {
       return { ...state, error: action.payload };
     case INGREDIENTS_SELECTED:
       return { ...state, ingredientSelect: action.payload };
+    // case UPDATE_INGREDIENTS:
+    //   return { ...state, ingredients: action.payload };
     case CLEAR_INGREDIENTS_SELECTEDS:
       return {
         ...state,
