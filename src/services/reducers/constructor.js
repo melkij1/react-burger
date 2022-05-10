@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import {
   SET_BUN,
   SET_INGREDIENT,
@@ -18,14 +17,6 @@ const initialState = {
   totalPrice: 0,
 };
 
-const addIngredients = (arr, item) => {
-  const newArr = [...arr, item];
-  const generatingId = newArr.map(x => {
-    return { ...x, uuid: uuidv4() };
-  });
-  return generatingId;
-};
-
 export default function burgerReducer(state = initialState, action) {
   switch (action.type) {
     case SET_BUN:
@@ -41,11 +32,7 @@ export default function burgerReducer(state = initialState, action) {
         ...state,
         burderConstructor: {
           ...state.burderConstructor,
-          // ingredients: [...state.burderConstructor.ingredients, action.payload],
-          ingredients: addIngredients(
-            state.burderConstructor.ingredients,
-            action.payload
-          ),
+          ingredients: [...state.burderConstructor.ingredients, action.payload],
         },
       };
     case SORT_INGREDIENT:
