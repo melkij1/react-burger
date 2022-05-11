@@ -1,80 +1,59 @@
-import React from "react";
-import { useEffect, useCallback, useReducer } from "react";
-import { AppContext } from "../../services/appContext";
-import { appReducer } from "../../services/appReduces";
+import React, { useEffect, useCallback } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDispatch, useSelector } from "react-redux";
+import { useActions } from "../../hooks/useActions";
 import AppHeader from "../AppHeader/AppHeader";
 import Main from "../Main/Main";
 import Modal from "../Modal/Modal";
 import IngredientDetails from "../IngredientDetails/IngredientDetails";
 import OrderDetails from "../OrderDetails/OrderDetails";
-import { fetchRequest } from "../../api/index";
-
-const initialState = {
-  ingredients: [],
-  ingredientSelect: {},
-  error: false,
-  modalMode: "",
-  modalIsOpen: false,
-  burderConstructor: {
-    bun: [],
-    ingredients: [],
-  },
-  totalPrice: 0,
-  orderNumber: 0,
-};
 
 function App() {
-  const [state, dispatch] = useReducer(appReducer, initialState, undefined);
+  const dispatch = useDispatch();
+  const { getIngredients, closeModalAction } = useActions();
+  const { error, ingredientSelect } = useSelector(
+    store => store.ingredientsState
+  );
+  const { modalIsOpen, modalMode } = useSelector(store => store.modalState);
+  const { orderNumber } = useSelector(store => store.orderState);
   const fetchData = useCallback(async () => {
-    await fetchRequest("/ingredients")
-      .then(response => {
-        const { data, success } = response;
-        if (success && data) {
-          dispatch({ type: "setIngredietns", payload: data });
-        }
-      })
-      .catch(error => {
-        dispatch({ type: "setError", payload: true });
-      });
-  }, []);
+    await getIngredients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return (
-    <AppContext.Provider
-      value={{
-        state,
-        dispatch,
-      }}
-    >
+    <>
       <div className="App">
-        {state.error ? (
+        {error ? (
           <div className="error-App">
             <p className="text text_type_main-large">
               Произошла ошибка, при получении данных
             </p>
           </div>
         ) : (
-          <>
+          <DndProvider backend={HTML5Backend}>
             <AppHeader />
             <Main />
-          </>
+          </DndProvider>
         )}
       </div>
       <Modal
-        show={state.modalIsOpen && state.modalMode === "IngredientDetails"}
-        onClose={() => dispatch({ type: "closeModal" })}
+        show={modalIsOpen && modalMode === "IngredientDetails"}
+        onClose={() => closeModalAction()}
       >
-        <IngredientDetails item={state.ingredientSelect} />
+        <IngredientDetails item={ingredientSelect} />
       </Modal>
       <Modal
-        show={state.modalIsOpen && state.modalMode === "orderDetails"}
-        onClose={() => dispatch({ type: "closeModal" })}
+        show={modalIsOpen && modalMode === "orderDetails"}
+        onClose={() => closeModalAction()}
       >
-        <OrderDetails item={state.orderNumber} />
+        <OrderDetails item={orderNumber} />
       </Modal>
-    </AppContext.Provider>
+    </>
   );
 }
 

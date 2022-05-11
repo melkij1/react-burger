@@ -7,9 +7,9 @@ import classNames from "classnames/bind";
 import { useHiddenScrollBody } from "../../hooks/useHiddenScrollBody";
 import styles from "./modal.module.css";
 Modal.propTypes = {
-  show: PropTypes.bool,
-  children: PropTypes.node,
-  onClose: PropTypes.func,
+  show: PropTypes.bool.isRequired,
+  children: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 function Modal({ show, children, onClose }) {
   const overlayRef = useRef(null);
@@ -35,6 +35,7 @@ function Modal({ show, children, onClose }) {
     return () => {
       document.body.removeEventListener("keydown", closeOnEsc);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ function Modal({ show, children, onClose }) {
       document.removeEventListener("mousedown", onOutside);
       document.removeEventListener("touchstart", onOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show, overlayRef]);
 
   return (

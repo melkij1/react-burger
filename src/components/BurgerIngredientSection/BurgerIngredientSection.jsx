@@ -9,9 +9,28 @@ BurgerIngredientSection.propTypes = {
   title: PropTypes.string.isRequired,
   ingredients: PropTypes.arrayOf(ingredientType).isRequired,
 };
-function BurgerIngredientSection({ title, ingredients }) {
+function BurgerIngredientSection({
+  title,
+  ingredients,
+  bunsRef,
+  saucesRef,
+  mainsRef,
+}) {
+  const refs = () => {
+    if (title === "Булки") {
+      return bunsRef;
+    } else if (title === "Соусы") {
+      return saucesRef;
+    } else {
+      return mainsRef;
+    }
+  };
+
   return (
-    <div className={classNames(styles.burgerIngredientSection, "mt-10")}>
+    <div
+      className={classNames(styles.burgerIngredientSection, "mt-10")}
+      ref={refs()}
+    >
       <div className="title text text_type_main-medium mb-6">{title}</div>
       {ingredients &&
         ingredients.map((ingredient, idx) => (
