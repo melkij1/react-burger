@@ -1,10 +1,10 @@
+import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 const ProtectedRoute = ({ path, exact, children }) => {
-  const { isAuth } = useSelector((store) => store.userState);
-
+  const isAuth = Cookies.get('accessToken');
+  console.log(isAuth, 'isatuh');
   return (
     <Route
       path={path}

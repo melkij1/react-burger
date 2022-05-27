@@ -20,7 +20,8 @@ function ResetForm() {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
-  const submitForm = async () => {
+  const submitForm = async (e) => {
+    e.preventDefault();
     const token = Cookies.get('token');
     if (form.code !== '') {
       setValue({ ...form, token });
@@ -50,30 +51,32 @@ function ResetForm() {
       >
         Восстановление пароля
       </div>
-      <div className={classNames(styles.profile_form__group, 'mb-6')}>
-        <Input
-          type={'password'}
-          placeholder={'Введите новый пароль'}
-          name={'passowrd'}
-          value={form.password}
-          icon={'ShowIcon'}
-          onChange={onChange}
-        />
-      </div>
-      <div className={classNames(styles.profile_form__group, 'mb-6')}>
-        <Input
-          type={'text'}
-          placeholder={'Введите код из письма'}
-          name={'code'}
-          value={form.code}
-          onChange={onChange}
-        />
-      </div>
-      <div className={classNames(styles.profile_form__group, 'mb-20')}>
-        <Button type="primary" size="medium" onClick={submitForm}>
-          Сохранить
-        </Button>
-      </div>
+      <form onSubmit={submitForm}>
+        <div className={classNames(styles.profile_form__group, 'mb-6')}>
+          <Input
+            type={'password'}
+            placeholder={'Введите новый пароль'}
+            name={'passowrd'}
+            value={form.password}
+            icon={'ShowIcon'}
+            onChange={onChange}
+          />
+        </div>
+        <div className={classNames(styles.profile_form__group, 'mb-6')}>
+          <Input
+            type={'text'}
+            placeholder={'Введите код из письма'}
+            name={'code'}
+            value={form.code}
+            onChange={onChange}
+          />
+        </div>
+        <div className={classNames(styles.profile_form__group, 'mb-20')}>
+          <Button type="primary" size="medium">
+            Сохранить
+          </Button>
+        </div>
+      </form>
       <div className={classNames(styles.profile_form__group, 'mb-4')}>
         <p
           className={classNames(

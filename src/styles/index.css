@@ -1,48 +1,48 @@
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   font-weight: 300;
-  src: url("../fonts/JetBrainsMono-Light.woff2") format("woff2");
+  src: url('../fonts/JetBrainsMono-Light.woff2') format('woff2');
 }
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   font-weight: 200;
-  src: url("../fonts/JetBrainsMono-ExtraLight.woff2") format("woff2");
+  src: url('../fonts/JetBrainsMono-ExtraLight.woff2') format('woff2');
 }
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   font-weight: 400;
-  src: url("../fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  src: url('../fonts/JetBrainsMono-Regular.woff2') format('woff2');
 }
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   font-weight: 500;
-  src: url("../fonts/JetBrainsMono-Medium.woff2") format("woff2");
+  src: url('../fonts/JetBrainsMono-Medium.woff2') format('woff2');
 }
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   font-weight: bold;
-  src: url("../fonts/JetBrainsMono-Bold.woff2") format("woff2");
+  src: url('../fonts/JetBrainsMono-Bold.woff2') format('woff2');
 }
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   font-weight: 600;
-  src: url("../fonts/JetBrainsMono-SemiBold.woff2") format("woff2");
+  src: url('../fonts/JetBrainsMono-SemiBold.woff2') format('woff2');
 }
 @font-face {
-  font-family: "JetBrains Mono";
+  font-family: 'JetBrains Mono';
   font-weight: 800;
-  src: url("../fonts/JetBrainsMono-ExtraBold.woff2") format("woff2");
+  src: url('../fonts/JetBrainsMono-ExtraBold.woff2') format('woff2');
 }
 
 body {
   margin: 0;
-  font-family: "JetBrains Mono", sans-serif;
+  font-family: 'JetBrains Mono', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
@@ -63,7 +63,7 @@ code {
   text-align: left;
   display: block;
   width: 100%;
-  font-family: "JetBrains Mono" !important;
+  font-family: 'JetBrains Mono' !important;
   font-weight: 700;
 }
 
@@ -101,23 +101,26 @@ code {
   justify-content: center;
 }
 
-.input__container{
-  width: 100%!important;
-}
-.input{
+.input__container {
   width: 100% !important;
 }
-.color_link{
+.input {
+  width: 100% !important;
+}
+.color_link {
   color: var(--colors-interface-accent);
   margin-left: 8px;
 }
-.lk-wrapper{
+.lk-wrapper {
   display: flex;
-  max-width:860px;
+  max-width: 860px;
   width: 100%;
   flex-wrap: nowrap;
-  justify-content:space-between;
+  justify-content: space-between;
 }
-.profile-wrapper{
+.profile-wrapper {
   margin-top: 120px;
+}
+form {
+  width: 100%;
 }

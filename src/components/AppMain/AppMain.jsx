@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { useActions } from '../../hooks/useActions';
 import HomePage from '../../pages/HomePage';
 import ProtectedRoute from '../../components/ProtectedRoute';
@@ -15,8 +14,7 @@ import Modal from '../../components/Modal/Modal';
 function AppMain() {
   const history = useHistory();
   const location = useLocation();
-  const dispatch = useDispatch();
-  const { getIngredients, closeModalAction } = useActions();
+  const { closeModalAction } = useActions();
 
   let background = location.state;
 
@@ -33,13 +31,6 @@ function AppMain() {
     closeModalAction();
     history.push('/');
   };
-  const fetchData = useCallback(async () => {
-    await getIngredients();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
   return (
     <main>
       <Switch location={background || location}>
@@ -58,10 +49,6 @@ function AppMain() {
         <Route exact path="/reset-password">
           <ResetPassword />
         </Route>
-        {/*<Route exact path='/feed'>*/}
-        {/*    <Login/>*/}
-        {/*</Route>*/}
-
         <ProtectedRoute path="/profile">
           <Profile>
             <ProfileForm />
@@ -73,9 +60,6 @@ function AppMain() {
         <Route exact path="/logout">
           <Profile />
         </Route>
-        {/*<Route exact path='/profile'>*/}
-        {/*    <Profile/>*/}
-        {/*</Route>*/}
       </Switch>
       {background && (
         <Route path={'/ingredients/:id'}>

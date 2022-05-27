@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
 import {
   Button,
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { useActions } from '../../hooks/useActions';
 
 import Loader from '../Icons/Loader';
 import styles from './styles.module.css';
 
 function LoginForm() {
+  const history = useHistory();
   const { login } = useActions();
   const [loader, setLoader] = useState(false);
   const [form, setValue] = useState({ email: '', password: '' });
 
-  const { isAuth } = useSelector((state) => state.userState);
   const onChange = (e) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
-  const submitForm = async () => {
+  const submitForm = async (e) => {
+    e.preventDefault();
     setLoader(true);
     const res = await login(form);
-
+    console.log(res);
     setLoader(false);
   };
 
-  if (isAuth) {
-    return <Redirect to={'/profile'} />;
+  if (Cookies.get('accessToken')) {
+    return <Redirect to={history?.location?.state?.from || '/'} />;
   }
 
   return (
@@ -42,31 +43,33 @@ function LoginForm() {
       >
         Вход
       </div>
-      <div className={classNames(styles.profile_form__group, 'mb-6')}>
-        <Input
-          type={'email'}
-          placeholder={'E-mail'}
-          name={'email'}
-          value={form.email}
-          errorText={'Ошибка'}
-          onChange={onChange}
-        />
-      </div>
-      <div className={classNames(styles.profile_form__group, 'mb-6')}>
-        <Input
-          type={'password'}
-          placeholder={'Пароль'}
-          name={'password'}
-          value={form.password}
-          errorText={'Ошибка'}
-          onChange={onChange}
-        />
-      </div>
-      <div className={classNames(styles.profile_form__group, 'mb-20')}>
-        <Button type="primary" size="medium" onClick={submitForm}>
-          {loader ? <Loader /> : 'Войти'}
-        </Button>
-      </div>
+      <form onSubmit={submitForm}>
+        <div className={classNames(styles.profile_form__group, 'mb-6')}>
+          <Input
+            type={'email'}
+            placeholder={'E-mail'}
+            name={'email'}
+            value={form.email}
+            errorText={'Ошибка'}
+            onChange={onChange}
+          />
+        </div>
+        <div className={classNames(styles.profile_form__group, 'mb-6')}>
+          <Input
+            type={'password'}
+            placeholder={'Пароль'}
+            name={'password'}
+            value={form.password}
+            errorText={'Ошибка'}
+            onChange={onChange}
+          />
+        </div>
+        <div className={classNames(styles.profile_form__group, 'mb-20')}>
+          <Button type="primary" size="medium">
+            {loader ? <Loader /> : 'Войти'}
+          </Button>
+        </div>
+      </form>
       <div className={classNames(styles.profile_form__group, 'mb-4')}>
         <p
           className={classNames(

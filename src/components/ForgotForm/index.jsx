@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import {
   Button,
@@ -18,14 +19,16 @@ function RegisterForm() {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
-  const submitForm = async () => {
+  const submitForm = async (e) => {
+    e.preventDefault();
     const res = await forgotPassword(form);
     if (res) {
       history.push('/reset-password', { from: location });
     }
   };
+  console.log(isAuth, 'isAuth');
 
-  if (isAuth) {
+  if (Cookies.get('accessToken')) {
     return <Redirect to={'/profile'} />;
   }
 
@@ -39,21 +42,23 @@ function RegisterForm() {
       >
         Восстановление пароля
       </div>
-      <div className={classNames(styles.profile_form__group, 'mb-6')}>
-        <Input
-          type={'email'}
-          placeholder={'Укажите e-mail'}
-          name={'email'}
-          errorText={'Ошибка'}
-          value={form.email}
-          onChange={onChange}
-        />
-      </div>
-      <div className={classNames(styles.profile_form__group, 'mb-20')}>
-        <Button type="primary" size="medium" onClick={submitForm}>
-          Восстановить
-        </Button>
-      </div>
+      <form onSubmit={submitForm}>
+        <div className={classNames(styles.profile_form__group, 'mb-6')}>
+          <Input
+            type={'email'}
+            placeholder={'Укажите e-mail'}
+            name={'email'}
+            errorText={'Ошибка'}
+            value={form.email}
+            onChange={onChange}
+          />
+        </div>
+        <div className={classNames(styles.profile_form__group, 'mb-20')}>
+          <Button type="primary" size="medium">
+            Восстановить
+          </Button>
+        </div>
+      </form>
       <div className={classNames(styles.profile_form__group, 'mb-4')}>
         <p
           className={classNames(
