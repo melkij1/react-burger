@@ -17,8 +17,12 @@
 
 .modalContentIngredient {
   min-width: 640px;
+  max-width: 640px;
+  margin: 0 auto;
 }
-
+.modalContentMargin {
+  margin-top: 180px;
+}
 .modalCloseButton {
   background: transparent;
   border: none;
@@ -52,7 +56,7 @@
   font-weight: 400;
   font-size: 28px;
   line-height: 24px;
-  font-family: "Iceland";
+  font-family: 'Iceland';
   display: block;
   text-align: center;
 }

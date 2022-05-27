@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Redirect, useLocation, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import {
   Button,
   Input,
@@ -10,36 +11,26 @@ import Loader from '../Icons/Loader';
 import { useActions } from '../../hooks/useActions';
 import styles from '../LoginForm/styles.module.css';
 function RegisterForm() {
-  const location = useLocation();
   const { register } = useActions();
-  const history = useHistory();
+
+  const { isAuth } = useSelector((state) => state.userState);
   const [loader, setLoader] = useState(false);
-  const [userRegister, setUserRegister] = useState(false);
+
   const [form, setValue] = useState({ name: '', email: '', password: '' });
 
-  //   useEffect(() => {
-  //     if(userRegister){
-  //       <Redirect to={{ pathname: "/login", state: { from: location.pathname }  }} />;
-  //     }
-  // },[userRegister,location]);
   const onChange = (e) => {
     setValue({ ...form, [e.target.name]: e.target.value });
-    console.log(form);
   };
 
   const submitForm = async () => {
     setLoader(true);
     const res = await register(form);
-    if (res) {
-      setUserRegister(true);
-    }
+
     setLoader(false);
   };
 
-  if (userRegister) {
-    console.log('redirect');
-    // history.push('/login')
-    // <Redirect to={{ pathname: "/login", state: { from: location.pathname }  }} />;
+  if (isAuth) {
+    <Redirect to={'/profile'} />;
   }
 
   return (

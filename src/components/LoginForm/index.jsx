@@ -1,25 +1,22 @@
-import React,{useState} from 'react';
-import { useSelector } from "react-redux";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Button,
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
-import { Link, Redirect, useLocation } from "react-router-dom";
+import { Link, Redirect } from 'react-router-dom';
 import { useActions } from '../../hooks/useActions';
 
-import Loader from "../Icons/Loader";
+import Loader from '../Icons/Loader';
 import styles from './styles.module.css';
 
 function LoginForm() {
-  const location = useLocation();
-  const {login} = useActions();
-  const [loader,setLoader] = useState(false);
+  const { login } = useActions();
+  const [loader, setLoader] = useState(false);
   const [form, setValue] = useState({ email: '', password: '' });
 
-  const { user } = useSelector(
-    state => state.userState
-  );
+  const { isAuth } = useSelector((state) => state.userState);
   const onChange = (e) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
@@ -27,14 +24,12 @@ function LoginForm() {
   const submitForm = async () => {
     setLoader(true);
     const res = await login(form);
+
     setLoader(false);
   };
 
-  if(user){
-    const { from } = location.state || { from: { pathname: "/" } };
-    return (
-      <Redirect to={from} />
-    );
+  if (isAuth) {
+    return <Redirect to={'/profile'} />;
   }
 
   return (
@@ -69,7 +64,7 @@ function LoginForm() {
       </div>
       <div className={classNames(styles.profile_form__group, 'mb-20')}>
         <Button type="primary" size="medium" onClick={submitForm}>
-          {loader ? <Loader /> : "Войти"}
+          {loader ? <Loader /> : 'Войти'}
         </Button>
       </div>
       <div className={classNames(styles.profile_form__group, 'mb-4')}>

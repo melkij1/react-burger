@@ -26,10 +26,8 @@ export const fetchRequest = async (api) => {
       'Content-Type': 'application/json',
     };
     if (token !== '') {
-      Object.assign(headers, { token });
+      Object.assign(headers, { authorization: token });
     }
-    console.log(headers);
-    // headers.set('authorization', Cookies.get('accessToken'));
     return await fetch(url, {
       method: 'POST',
       mode: 'cors',
@@ -42,7 +40,7 @@ export const fetchRequest = async (api) => {
   get = async (api) => {
     const url = `${BASE_URL}${api}`;
     const token = Cookies.get('accessToken');
-    console.log(token, 'token');
+
     return await fetch(url, {
       method: 'GET',
       mode: 'cors',
@@ -53,13 +51,29 @@ export const fetchRequest = async (api) => {
         authorization: token,
       },
     }).then(checkResponseGET);
+  },
+  patch = async (api, body) => {
+    const url = `${BASE_URL}${api}`;
+    const token = Cookies.get('accessToken');
+
+    return await fetch(url, {
+      method: 'PATCH',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: token,
+      },
+      body: JSON.stringify(body),
+    }).then(checkResponse);
   };
 
 const checkResponse = (res, error) => {
   if (res.ok) {
     return res.json();
   }
-  console.log(res, error, 'res');
+
   return Promise.reject(res.status);
 };
 
@@ -67,5 +81,6 @@ const checkResponseGET = (res) => {
   if (res.ok) {
     return res.json();
   }
-  return res.text().then((text) => Promise.reject(JSON.parse(text)));
+
+  return Promise.reject(res.text().then((text) => JSON.parse(text)));
 };

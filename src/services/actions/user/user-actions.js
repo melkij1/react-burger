@@ -1,10 +1,12 @@
 import Cookies from 'js-cookie';
-import { post, get } from '../../../api';
+import { post, get, patch } from '../../../api';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAILED = 'REGISTER_FAILED';
 export const SET_USER = 'SET_USER';
+export const SET_USERAUTH = 'SET_USERAUTH';
+export const SET_FORGOT_PASSWORD = 'SET_FORGOT_PASSWORD';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -35,23 +37,45 @@ export const UserActionsCreator = {
     const payload = {
       token: Cookies.get('refreshToken'),
     };
-    const token = Cookies.get('accessToken');
-    const res = await post('/auth/token', payload, token);
-    if (res.success) {
-      console.log(res, 'updateToken');
-      return true;
-    } else {
+
+    return await post('/auth/token', payload).then((res) => {
+      if (res.success) {
+        const time = new Date(new Date().getTime() + 20 * 60 * 1000);
+        Cookies.set('accessToken', res.accessToken, {
+          expires: time,
+        });
+        Cookies.set('refreshToken', res.refreshToken);
+        return true;
+      }
       return false;
-    }
+    });
+  },
+  logoutUser: async () => {
+    const payload = {
+      token: Cookies.get('refreshToken'),
+    };
+    return await post('/auth/logout', payload).then((res) => {
+      if (res.success) {
+        Cookies.remove('accessToken');
+        Cookies.remove('refreshToken');
+        return true;
+      }
+      return false;
+    });
   },
   forgotPassword: (form) => (dispatch) => {
-    post('/password-reset', form).then((res) => {
-      console.log(res, 'forgotPassword');
+    return post('/password-reset', form).then((res) => {
+      if (res.success) {
+        dispatch({ type: SET_FORGOT_PASSWORD, payload: true });
+        return true;
+      }
     });
   },
   resetPassword: (form) => (dispatch) => {
-    post('password-reset/reset', form).then((res) => {
-      console.log(res, 'forgotPassword');
+    return post('password-reset/reset', form).then((res) => {
+      if (res.success) {
+        return true;
+      }
     });
   },
   register: (form) => (dispatch) => {
@@ -68,54 +92,54 @@ export const UserActionsCreator = {
   login: (form) => (dispatch) => {
     return post('/auth/login', form).then((res) => {
       if (res.success) {
-        Cookies.set('accessToken', res.accessToken);
+        const time = new Date(new Date().getTime() + 20 * 60 * 1000);
+        Cookies.set('accessToken', res.accessToken, {
+          expires: time,
+        });
         Cookies.set('refreshToken', res.refreshToken);
         dispatch({ type: SET_USER, payload: res.user });
+        dispatch({ type: SET_USERAUTH, payload: true });
         return true;
       }
       return false;
     });
   },
-  getUser: () => (dispatch) => {
+  changeUserData: (form) => async (dispatch) => {
+    if (!Cookies.get('accessToken')) {
+      const resToken = await UserActionsCreator.updateToken();
+      console.log(resToken, 'getUserInformation res toekn');
+    }
+    return await patch('/auth/user', form).then((res) => {
+      if (res.success) {
+        dispatch({ type: SET_USER, payload: res.user });
+
+        return true;
+      }
+    });
+  },
+  getUser: () => {
     return get('/auth/user')
-      .then((res) => {
-        if (res.success) {
-          dispatch({ type: SET_USER, payload: res.user });
-          return true;
-        }
+      .then((response) => {
+        return response;
       })
       .catch((error) => {
-        console.error(error);
         return error;
       });
   },
   getUserInformation: () => async (dispatch) => {
-    const response = await UserActionsCreator.getUser();
-    if (!response.success) {
+    if (!Cookies.get('accessToken')) {
       const resToken = await UserActionsCreator.updateToken();
-      console.log(resToken, 'getUserInformation res');
-      const res = await UserActionsCreator.getUser();
-      if (res) {
-        console.log(res, 'update token');
-        return res;
-      }
-      // dispatch({ type: SET_USER, payload: response.user });
-      // console.log(response, 'getUserInformation success');
-      // return response.user;
-    } else {
-      return response.user;
+      console.log(resToken, 'getUserInformation res toekn');
     }
-
-    // .then((res) => {
-    //   return res;
-    // })
-    // .catch(async (err) => {
-    //   if (err.message === 'jwt expired') {
-    //     const res = await UserActionsCreator.updateToken();
-    //     if (res) {
-    //       console.log(res, 'token');
-    //     }
-    //   }
-    // });
+    return await UserActionsCreator.getUser()
+      .then(async (res) => {
+        if (res.success) {
+          dispatch({ type: SET_USER, payload: res.user });
+          return res;
+        }
+      })
+      .catch(async (error) => {
+        console.log(error, 'error');
+      });
   },
 };

@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useDrop } from "react-dnd";
-import { useActions } from "../../hooks/useActions";
+import React, { useState, useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDrop } from 'react-dnd';
+import { useActions } from '../../hooks/useActions';
 import {
   ConstructorElement,
   DragIcon,
   CurrencyIcon,
   Button,
-} from "@ya.praktikum/react-developer-burger-ui-components";
-import BurgerConstructorItem from "../BurgerConstructorItem/BurgerConstructorItem";
-import Loader from "../Icons/Loader";
-import styles from "./BurgerConstructor.module.css";
-import classNames from "classnames/bind";
+} from '@ya.praktikum/react-developer-burger-ui-components';
+import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorItem';
+import Loader from '../Icons/Loader';
+import styles from './BurgerConstructor.module.css';
+import classNames from 'classnames/bind';
 export default function BurgerCards({ onDropHandler }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const {
     setPrice,
     removeIngredient,
@@ -22,23 +24,24 @@ export default function BurgerCards({ onDropHandler }) {
     setIsLoader,
   } = useActions();
   const { burderConstructor, totalPrice } = useSelector(
-    state => state.burgerState
+    (state) => state.burgerState
   );
   const { ingredients: ingredientsState } = useSelector(
-    state => state.ingredientsState
+    (state) => state.ingredientsState
   );
-  const { loader } = useSelector(state => state.orderState);
+  const { isAuth } = useSelector((state) => state.userState);
+  const { loader } = useSelector((state) => state.orderState);
   const [hasDisabled, setHasDisabled] = useState(false);
   const { bun, ingredients } = burderConstructor;
   const bunItem = bun?.[0];
 
   const [, dropIngredientCard] = useDrop({
-    accept: "ingredient-card",
+    accept: 'ingredient-card',
     drop(itemId) {
       onDropHandler(itemId);
     },
   });
-  const [, dropIngredient] = useDrop({ accept: "ingredients-sort" });
+  const [, dropIngredient] = useDrop({ accept: 'ingredients-sort' });
   useEffect(() => {
     const bunPrice = bun[0]?.price * 2 || 0;
     const ingredientsPrices = ingredients?.reduce(
@@ -56,7 +59,7 @@ export default function BurgerCards({ onDropHandler }) {
 
   const handlerName = (name, type) => {
     if (type) {
-      if (type === "top") {
+      if (type === 'top') {
         return `${name} (верх)`;
       } else {
         return `${name} (низ)`;
@@ -66,7 +69,7 @@ export default function BurgerCards({ onDropHandler }) {
   };
 
   const removeItem = (item, index) => {
-    const findItem = ingredientsState.find(x => x._id === item._id);
+    const findItem = ingredientsState.find((x) => x._id === item._id);
     if (findItem && findItem.__v > 0) {
       findItem.__v = findItem.__v - 1;
     }
@@ -75,16 +78,21 @@ export default function BurgerCards({ onDropHandler }) {
 
   const orderAdd = async () => {
     setIsLoader(true);
-
-    const bunId = bunItem._id;
-    const ingredientsId = ingredients.map(x => x._id);
-    const ingredientsData = [bunId, ...ingredientsId, bunId];
-    await getOrder(ingredientsData);
+    if (!isAuth) {
+      history.push('/login');
+      setIsLoader(false);
+    }
+    if (isAuth) {
+      const bunId = bunItem._id;
+      const ingredientsId = ingredients.map((x) => x._id);
+      const ingredientsData = [bunId, ...ingredientsId, bunId];
+      await getOrder(ingredientsData);
+    }
   };
 
   const findIngredient = useCallback(
-    id => {
-      const findItem = ingredients.find(x => x._id === id);
+    (id) => {
+      const findItem = ingredients.find((x) => x._id === id);
 
       return {
         findItem,
@@ -109,11 +117,11 @@ export default function BurgerCards({ onDropHandler }) {
             ref={dropIngredientCard}
           >
             {bunItem && (
-              <div className={classNames(styles.burgerCard, "pr-4")}>
+              <div className={classNames(styles.burgerCard, 'pr-4')}>
                 <ConstructorElement
                   type="top"
                   isLocked={true}
-                  text={handlerName(bunItem.name, "top")}
+                  text={handlerName(bunItem.name, 'top')}
                   price={bunItem.price}
                   thumbnail={bunItem.image}
                 />
@@ -123,8 +131,8 @@ export default function BurgerCards({ onDropHandler }) {
               ref={dropIngredient}
               className={classNames(
                 styles.burgerWrapper,
-                "customScroll",
-                "pr-2"
+                'customScroll',
+                'pr-2'
               )}
             >
               {ingredients &&
@@ -153,11 +161,11 @@ export default function BurgerCards({ onDropHandler }) {
                 })}
             </div>
             {bunItem && (
-              <div className={classNames(styles.burgerCard, "pr-4")}>
+              <div className={classNames(styles.burgerCard, 'pr-4')}>
                 <ConstructorElement
                   type="bottom"
                   isLocked={true}
-                  text={handlerName(bunItem.name, "bottom")}
+                  text={handlerName(bunItem.name, 'bottom')}
                   price={bunItem.price}
                   thumbnail={bunItem.image}
                 />
@@ -165,11 +173,11 @@ export default function BurgerCards({ onDropHandler }) {
             )}
           </div>
         </div>
-        <div className={classNames(styles.burgerTotalPrice, "mt-10 mr-4")}>
+        <div className={classNames(styles.burgerTotalPrice, 'mt-10 mr-4')}>
           <div
             className={classNames(
               styles.price,
-              "text text_type_digits-medium mr-10"
+              'text text_type_digits-medium mr-10'
             )}
           >
             <span>{totalPrice}</span>
@@ -182,7 +190,7 @@ export default function BurgerCards({ onDropHandler }) {
               onClick={orderAdd}
               disabled={hasDisabled}
             >
-              {loader ? <Loader /> : "Оформить заказ"}
+              {loader ? <Loader /> : 'Оформить заказ'}
             </Button>
           </div>
         </div>

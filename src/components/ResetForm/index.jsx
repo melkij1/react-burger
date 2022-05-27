@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, Redirect, useLocation, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import {
   Button,
@@ -6,11 +8,14 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from '../LoginForm/styles.module.css';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 import { useActions } from '../../hooks/useActions';
 function ResetForm() {
+  const location = useLocation();
+  const history = useHistory();
   const { resetPassword } = useActions();
+  const { user } = useSelector((state) => state.userState);
   const [form, setValue] = useState({ password: '', token: '', code: '' });
+
   const onChange = (e) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
@@ -20,9 +25,21 @@ function ResetForm() {
     if (form.code !== '') {
       setValue({ ...form, token });
       const res = await resetPassword(form);
-      console.log(res, 'submit');
+      if (res) {
+        history.push('/login');
+      }
     }
   };
+
+  if (user) {
+    return <Redirect to={'/'} />;
+  }
+  if (
+    !location.state ||
+    (location.state && location.state.from.pathname !== '/forgot-password')
+  ) {
+    return <Redirect to={'/forgot-password'} />;
+  }
   return (
     <div className={styles.profileForm}>
       <div
@@ -38,6 +55,7 @@ function ResetForm() {
           type={'password'}
           placeholder={'Введите новый пароль'}
           name={'passowrd'}
+          value={form.password}
           icon={'ShowIcon'}
           onChange={onChange}
         />
@@ -47,6 +65,7 @@ function ResetForm() {
           type={'text'}
           placeholder={'Введите код из письма'}
           name={'code'}
+          value={form.code}
           onChange={onChange}
         />
       </div>
