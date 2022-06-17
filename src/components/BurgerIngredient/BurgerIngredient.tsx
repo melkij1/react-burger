@@ -8,10 +8,16 @@ import {
 import classNames from "classnames/bind";
 import { ingredientType } from "../../types/index";
 import styles from "./BurgerIngredient.module.css";
-BurgerIngredient.propTypes = {
-  ingredient: ingredientType.isRequired,
-};
-export default function BurgerIngredient({ ingredient }) {
+
+interface IComponent {
+  ingredient: ingredientType;
+}
+declare module "react" {
+  interface FunctionComponent<P = {}> {
+    (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
+  }
+}
+export default function BurgerIngredient({ ingredient }: IComponent) {
   const { setIngredientSelected, openModalAction } = useActions();
   const [{ opacity }, dragIngredient] = useDrag({
     type: "ingredient-card",
@@ -30,15 +36,11 @@ export default function BurgerIngredient({ ingredient }) {
         className={classNames(styles.burgerItem, "mb-8")}
         onClick={openModal}
         ref={dragIngredient}
-        styles={{ opacity }}
+        style={{ opacity }}
       >
         <div className="pl-4 pr-4">
           {ingredient.__v > 0 && (
-            <Counter
-              count={ingredient.__v}
-              size="default"
-              className="burderCount"
-            />
+            <Counter count={ingredient.__v} size="default" />
           )}
 
           <img src={ingredient.image} alt="" className="mb-1" />

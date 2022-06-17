@@ -3,10 +3,11 @@ import styles from "../Modal/modal.module.css";
 import classNames from "classnames/bind";
 import { ingredientType } from "../../types/index";
 
-IngredientDetails.propTypes = {
-  item: ingredientType.isRequired,
-};
-export default function IngredientDetails({ item }) {
+interface IComponent {
+  item: ingredientType;
+}
+
+const IngredientDetails = ({ item }: IComponent) => {
   return (
     <div
       className={classNames(styles.modalContent, styles.modalContentIngredient)}
@@ -47,4 +48,5 @@ export default function IngredientDetails({ item }) {
       </div>
     </div>
   );
-}
+};
+export default IngredientDetails;

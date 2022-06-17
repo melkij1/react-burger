@@ -1,21 +1,23 @@
 import React from "react";
-import PropTypes from "prop-types";
 import BurgerIngredient from "../BurgerIngredient/BurgerIngredient";
 import styles from "./BurgerIngredientSection.module.css";
 import classNames from "classnames/bind";
 import { ingredientType } from "../../types/index";
 
-BurgerIngredientSection.propTypes = {
-  title: PropTypes.string.isRequired,
-  ingredients: PropTypes.arrayOf(ingredientType).isRequired,
-};
+interface IComponent {
+  title: string;
+  ingredients: ingredientType[];
+  bunsRef: React.Ref<any>;
+  saucesRef: React.Ref<any>;
+  mainsRef: React.Ref<any>;
+}
 function BurgerIngredientSection({
   title,
   ingredients,
   bunsRef,
   saucesRef,
   mainsRef,
-}) {
+}: IComponent) {
   const refs = () => {
     if (title === "Булки") {
       return bunsRef;
@@ -35,7 +37,7 @@ function BurgerIngredientSection({
       {ingredients &&
         ingredients.map((ingredient, idx) => (
           <BurgerIngredient
-            key={`${ingredient.id}_${idx}`}
+            key={`${ingredient._id}_${idx}`}
             ingredient={ingredient}
           />
         ))}

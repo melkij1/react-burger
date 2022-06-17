@@ -1,15 +1,11 @@
 import {
-  SET_BUN,
-  SET_INGREDIENT,
-  SET_PRICE,
-  REMOVE_INGREDIENT,
-  CLEAR_CONSTRUCTOR,
-  REMOVE_BUN,
-  SORT_INGREDIENT,
+  ActionConstructorTypes,
+  ConstructorAction,
 } from "../actions/constructor/types";
 
 import { sortArray } from "../../helpers";
-const initialState = {
+import { ConstructorState } from "../../types";
+const initialState: ConstructorState = {
   burderConstructor: {
     bun: [],
     ingredients: [],
@@ -17,9 +13,12 @@ const initialState = {
   totalPrice: 0,
 };
 
-export default function burgerReducer(state = initialState, action) {
+export default function burgerReducer(
+  state = initialState,
+  action: ConstructorAction
+): ConstructorState {
   switch (action.type) {
-    case SET_BUN:
+    case ActionConstructorTypes.SET_BUN:
       return {
         ...state,
         burderConstructor: {
@@ -27,7 +26,7 @@ export default function burgerReducer(state = initialState, action) {
           bun: [...state.burderConstructor.bun, action.payload],
         },
       };
-    case SET_INGREDIENT:
+    case ActionConstructorTypes.SET_INGREDIENT:
       return {
         ...state,
         burderConstructor: {
@@ -35,7 +34,7 @@ export default function burgerReducer(state = initialState, action) {
           ingredients: [...state.burderConstructor.ingredients, action.payload],
         },
       };
-    case SORT_INGREDIENT:
+    case ActionConstructorTypes.SORT_INGREDIENT:
       const { index, atIndex } = action.payload;
       return {
         ...state,
@@ -48,9 +47,9 @@ export default function burgerReducer(state = initialState, action) {
           ),
         },
       };
-    case SET_PRICE:
+    case ActionConstructorTypes.SET_PRICE:
       return { ...state, totalPrice: action.payload };
-    case CLEAR_CONSTRUCTOR:
+    case ActionConstructorTypes.CLEAR_CONSTRUCTOR:
       return {
         ...state,
         burderConstructor: {
@@ -58,7 +57,7 @@ export default function burgerReducer(state = initialState, action) {
           ingredients: [],
         },
       };
-    case REMOVE_BUN:
+    case ActionConstructorTypes.REMOVE_BUN:
       return {
         ...state,
         burderConstructor: {
@@ -66,7 +65,7 @@ export default function burgerReducer(state = initialState, action) {
           bun: [],
         },
       };
-    case REMOVE_INGREDIENT:
+    case ActionConstructorTypes.REMOVE_INGREDIENT:
       return {
         ...state,
         burderConstructor: {
