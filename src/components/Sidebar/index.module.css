@@ -1,0 +1,12 @@
+.sidebar {
+}
+.nav {
+}
+.nav_list {
+  list-style: none;
+  padding: 0;
+}
+.nav_item {
+  padding: 10px 0px;
+  cursor: pointer;
+}
