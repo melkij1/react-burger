@@ -1,12 +1,13 @@
-import { fetchPost } from "../../../api/index";
-import { ActionOrderTypes, OrderAction } from "./types";
-import { ActionModalTypes } from "../modal/types";
-import { ActionIngredientsTypes } from "../ingredients/types";
-import { ActionConstructorTypes } from "../constructor/types";
+import { fetchPost } from '../../../api/index';
+import { ActionOrderTypes, OrderAction } from './types';
+import { ActionModalTypes } from '../modal/types';
+import { ActionIngredientsTypes } from '../ingredients/types';
+import { ActionConstructorTypes } from '../constructor/types';
+
 export const OrderActionCreators = {
-  getOrder: (ingredientsData: any) => (dispatch: any) => {
-    fetchPost("/orders", ingredientsData)
-      .then(response => {
+  getOrder: (ingredientsData: string[]) => (dispatch: any) => {
+    fetchPost('/orders', ingredientsData)
+      .then((response): void => {
         const { success, order } = response;
         if (success && order) {
           dispatch({
@@ -15,7 +16,7 @@ export const OrderActionCreators = {
           });
           dispatch({
             type: ActionModalTypes.OPENMODAL,
-            payload: { modalIsOpen: true, mode: "orderDetails" },
+            payload: { modalIsOpen: true, mode: 'orderDetails' },
           });
           dispatch({ type: ActionConstructorTypes.CLEAR_CONSTRUCTOR });
           dispatch({
@@ -23,8 +24,8 @@ export const OrderActionCreators = {
           });
         }
       })
-      .catch(err => {
-        console.error("Не получилось оформить заказ");
+      .catch((err) => {
+        console.error('Не получилось оформить заказ');
       })
       .finally(() => {
         dispatch({ type: ActionOrderTypes.SET_LOADER, payload: false });

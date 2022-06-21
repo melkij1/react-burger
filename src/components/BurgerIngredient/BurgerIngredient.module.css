@@ -13,3 +13,8 @@
 .burderItemPrice span {
   margin-right: 9px;
 }
+.burgerItemlink {
+  text-decoration: none;
+  color: #fff;
+  cursor: pointer;
+}

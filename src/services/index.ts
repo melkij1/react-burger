@@ -1,17 +1,20 @@
-import { applyMiddleware, combineReducers, createStore, compose } from "redux";
-import thunk from "redux-thunk";
-import reducers from "./reducers";
+import { applyMiddleware, combineReducers, createStore, compose } from 'redux';
+import thunk from 'redux-thunk';
+import { rootReducer } from './reducers';
 
 declare global {
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+    // args: () => any;
   }
 }
-const rootReducer = combineReducers(reducers);
-const enhancer = compose(
-  applyMiddleware(thunk),
-  window.__REDUX_DEVTOOLS_EXTENSION__
-    ? window.__REDUX_DEVTOOLS_EXTENSION__()
-    : args => args
-);
-export const store = createStore(rootReducer, enhancer);
+// const rootReducer = combineReducers(reducers);
+// const enhancer = compose(
+//   applyMiddleware(thunk),
+//   window.__REDUX_DEVTOOLS_EXTENSION__
+//     ? (window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose)
+//     : (args) => args
+// );
+// const enhancer =
+//   (window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose) || compose;
+export const store = createStore(rootReducer, applyMiddleware(thunk));
