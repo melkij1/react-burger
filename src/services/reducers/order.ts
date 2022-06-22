@@ -1,4 +1,5 @@
-import { ActionOrderTypes, OrderAction } from "../actions/order/types";
+import { ActionOrderTypes, OrderAction } from '../actions/order/types';
+//Для ревьюера случайно сделал типизацию стора раньше времени. Если будут замечения по стору в следующем спринте поправлю.
 interface IState {
   orderNumber: number;
   loader: boolean;

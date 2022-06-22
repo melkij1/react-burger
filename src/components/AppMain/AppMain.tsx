@@ -14,24 +14,21 @@ import Modal from '../Modal/Modal';
 import { Location } from 'history';
 
 function AppMain() {
-  const location = useLocation<{ background: Location }>();
+  // const location = useLocation<{ background?: Location }>();
+  const location = useLocation();
   const history = useHistory();
   const { closeModalAction } = useActions();
-  const action = history.action !== 'PUSH';
-  // let background = location.state;
-  let background = action && location.state && location.state.background;
+  const { state: locationState } = useLocation() as {
+    state: { background?: typeof location } | null;
+  };
 
-  // if (location.state) {
-  //   background = location?.state?.background;
-  //   console.log(background);
-  // }
+  let { background } = locationState ?? {};
 
-  // if (history.action !== 'PUSH') {
-  //   background = undefined;
-  // }
+  if (history.action !== 'PUSH') {
+    background = undefined;
+  }
 
   const closeModalIgredient = () => {
-    background = false;
     closeModalAction();
     history.push('/');
   };
@@ -65,13 +62,13 @@ function AppMain() {
           <Profile />
         </Route>
       </Switch>
-      {/* {background && (
+      {background && (
         <Route path={'/ingredients/:id'}>
           <Modal show={true} onClose={() => closeModalIgredient()}>
             <IngredientsDetails />
           </Modal>
         </Route>
-      )} */}
+      )}
     </main>
   );
 }

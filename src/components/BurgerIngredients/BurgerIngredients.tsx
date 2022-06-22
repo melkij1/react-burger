@@ -29,7 +29,7 @@ function BurgerIngredients() {
   const saucesRef = useRef<HTMLDivElement>(null);
   const mainsRef = useRef<HTMLDivElement>(null);
 
-  const [current, setCurrent] = useState('bun');
+  const [current, setCurrent] = useState<string>('bun');
   const sortItems: ingredientType[] = ingredients.sort((a, b) => {
     if (a.type === 'bun' && b.type !== 'bun') {
       return -1;
@@ -95,7 +95,9 @@ function BurgerIngredients() {
               onClick={setCurrent}
               value={type}
             >
-              {ingredientTypeTitles[type]}
+              {/* {ingredientTypeTitles[type]}
+               */}
+              {(ingredientTypeTitles as any)[type]}
             </Tab>
           ))}
       </div>
@@ -108,7 +110,8 @@ function BurgerIngredients() {
           Object.keys(typesIngredient).map((ingredient, index) => (
             <BurgerIngredientSection
               key={ingredient}
-              title={ingredientTypeTitles[ingredient]}
+              // title={ingredientTypeTitles[ingredient]}
+              title={(ingredientTypeTitles as any)[ingredient]}
               ingredients={typesIngredient[ingredient]}
               bunsRef={bunsRef}
               saucesRef={saucesRef}

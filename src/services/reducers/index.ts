@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-
+//Для ревьюера случайно сделал типизацию стора раньше времени. Если будут замечения по стору в следующем спринте поправлю.
 import ingredients from './ingredients';
 import modal from './modal';
 import burgerReducer from './constructor';

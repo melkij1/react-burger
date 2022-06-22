@@ -5,10 +5,10 @@ import {
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useActions } from '../../hooks/useActions';
-
+import { useDispatch } from 'react-redux';
 import Loader from '../Icons/Loader';
 import styles from './index.module.css';
-
+import { UserActionsCreator } from '../../services/actions/user/user-actions';
 declare module 'react' {
   interface FunctionComponent<P = {}> {
     (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
@@ -16,17 +16,21 @@ declare module 'react' {
 }
 
 function ProfileForm() {
-  const { getUserInformation, changeUserData } = useActions();
+  const dispatch = useDispatch();
   const { user } = useTypedSelector((state) => state.userState);
-  const [loader, setLoader] = useState(false);
-  const [form, setForm] = useState({
+  const [loader, setLoader] = useState<boolean>(false);
+  const [form, setForm] = useState<{
+    name: string;
+    email: string;
+    password: string;
+  }>({
     name: '',
     email: '',
     password: '',
   });
-  const [isFocusName, setFocusName] = useState(false);
-  const [isFocusEmail, setFocusEmail] = useState(false);
-  const [isFocusPassword, setFocusPassword] = useState(false);
+  const [isFocusName, setFocusName] = useState<boolean>(false);
+  const [isFocusEmail, setFocusEmail] = useState<boolean>(false);
+  const [isFocusPassword, setFocusPassword] = useState<boolean>(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -37,15 +41,16 @@ function ProfileForm() {
     setForm({ ...form, name: user.name, email: user.email, password: '' });
   };
   const fetchUse = async () => {
-    const res = await getUserInformation();
-    if (res.success) {
+    const res = await UserActionsCreator.getUserInformation()(dispatch);
+    console.log(res, 'ress fetch user');
+    if (res && res?.success && res?.user) {
       setForm({ ...form, name: res.user.name, email: res.user.email });
     }
   };
   const submitForm = async (e: React.ChangeEvent<HTMLElement>) => {
     e.preventDefault();
     setLoader(true);
-    const response = await changeUserData(form);
+    const response = await UserActionsCreator.changeUserData(form)(dispatch);
     if (response) {
       setLoader(false);
     }

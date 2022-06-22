@@ -20,11 +20,11 @@ const Modal: FC<IModal> = ({ show, children, onClose }) => {
     }
   };
 
-  const onOutside = (event: React.MouseEvent<HTMLElement>) => {
+  const onOutside = (event: Event) => {
     if (
       show &&
       overlayRef.current &&
-      !overlayRef.current.contains(event.target)
+      !overlayRef.current.contains(event.target as Node)
     ) {
       onClose();
     }
@@ -48,28 +48,32 @@ const Modal: FC<IModal> = ({ show, children, onClose }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show, overlayRef]);
 
-  return (
-    show &&
-    ReactDOM.createPortal(
-      <div className="modalTarget">
-        <ModalOverlay />
-        <div
-          ref={overlayRef}
-          className={classNames(styles.modal, 'pt-15 pb-15 pr-10 pl-10')}
-        >
-          <button
-            type="button"
-            className={styles.modalCloseButton}
-            onClick={onClose}
+  if (show) {
+    return (
+      // show &&
+      ReactDOM.createPortal(
+        <div className="modalTarget">
+          <ModalOverlay />
+          <div
+            ref={overlayRef}
+            className={classNames(styles.modal, 'pt-15 pb-15 pr-10 pl-10')}
           >
-            <CloseIcon type="primary" />
-          </button>
-          {children}
-        </div>
-      </div>,
-      target
-    )
-  );
+            <button
+              type="button"
+              className={styles.modalCloseButton}
+              onClick={onClose}
+            >
+              <CloseIcon type="primary" />
+            </button>
+            {children}
+          </div>
+        </div>,
+        target
+      )
+    );
+  } else {
+    return null;
+  }
 };
 
 export default Modal;

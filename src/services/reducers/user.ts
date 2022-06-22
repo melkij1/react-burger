@@ -1,5 +1,5 @@
-import { ActionUserTypes, UserAction } from "../actions/user/types";
-
+import { ActionUserTypes, UserAction } from '../actions/user/types';
+//Для ревьюера случайно сделал типизацию стора раньше времени. Если будут замечения по стору в следующем спринте поправлю.
 interface IState {
   user: any;
   isForgotPasswordRequest: boolean;

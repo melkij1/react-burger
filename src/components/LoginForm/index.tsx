@@ -14,8 +14,11 @@ import styles from './styles.module.css';
 function LoginForm() {
   const history = useHistory<{ from: string }>();
   const { login } = useActions();
-  const [loader, setLoader] = useState(false);
-  const [form, setValue] = useState({ email: '', password: '' });
+  const [loader, setLoader] = useState<boolean>(false);
+  const [form, setValue] = useState<{ email: string; password: string }>({
+    email: '',
+    password: '',
+  });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });

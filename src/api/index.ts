@@ -19,6 +19,12 @@ interface ICheckResponse {
   order?: {
     number: number;
   };
+  accessToken?: string;
+  refreshToken?: string;
+  user?: {
+    email?: string;
+    name?: string;
+  };
 }
 
 interface IRequest extends ICheckResponse {

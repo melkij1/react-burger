@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import {
   Button,
@@ -8,7 +9,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import classNames from 'classnames';
 import Loader from '../Icons/Loader';
-import { useActions } from '../../hooks/useActions';
+import { UserActionsCreator } from '../../services/actions/user/user-actions';
 import styles from '../LoginForm/styles.module.css';
 
 declare module 'react' {
@@ -18,11 +19,15 @@ declare module 'react' {
 }
 
 function RegisterForm() {
-  const { register } = useActions();
+  // const { register } = useActions();
+  const dispatch = useDispatch();
+  const [loader, setLoader] = useState<boolean>(false);
 
-  const [loader, setLoader] = useState(false);
-
-  const [form, setValue] = useState({ name: '', email: '', password: '' });
+  const [form, setValue] = useState<{
+    name: string;
+    email: string;
+    password: string;
+  }>({ name: '', email: '', password: '' });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
@@ -31,7 +36,7 @@ function RegisterForm() {
   const submitForm = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoader(true);
-    const res = await register(form);
+    const res = await UserActionsCreator.register(form)(dispatch);
     console.log(res);
     setLoader(false);
   };
@@ -73,7 +78,6 @@ function RegisterForm() {
         </div>
         <div className={classNames(styles.profile_form__group, 'mb-6')}>
           <PasswordInput
-            // placeholder={'Пароль'}
             name={'password'}
             value={form.password}
             onChange={onChange}

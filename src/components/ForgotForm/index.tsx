@@ -16,7 +16,7 @@ function RegisterForm() {
   const { isAuth, isForgotPasswordRequest } = useTypedSelector(
     (state) => state.userState
   );
-  const [form, setValue] = useState({ email: '' });
+  const [form, setValue] = useState<{ email: string }>({ email: '' });
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
   };

@@ -1,17 +1,27 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useDrag, useDrop } from "react-dnd";
-import styles from "../BurgerConstructor/BurgerConstructor.module.css";
-function BurgerConstructorItem({
+import React, { FC } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+import { ingredientType } from '../../types';
+import styles from '../BurgerConstructor/BurgerConstructor.module.css';
+
+interface IBurgerConstructorItem {
+  children?: React.ReactNode;
+  id: string;
+  ingredientsIndex: number;
+  findIngredient: any;
+  sortIngredient: (ingredientsIndex: number, droppedIndex: number) => void;
+}
+
+const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
   children,
   id,
   ingredientsIndex,
   findIngredient,
   sortIngredient,
-}) {
+}) => {
+  console.log(findIngredient, 'findd');
   const [, drag] = useDrag(
     () => ({
-      type: "ingredients-sort",
+      type: 'ingredients-sort',
       item: { id: id, ingredientsIndex },
       end: (item, monitor) => {
         const { id, ingredientsIndex } = item;
@@ -26,10 +36,10 @@ function BurgerConstructorItem({
   );
 
   const [, drop] = useDrop(
-    () => ({
-      accept: "ingredients-sort",
+    (): any => ({
+      accept: 'ingredients-sort',
       canDrop: () => false,
-      hover({ id: itemId }) {
+      hover({ id: itemId }: any) {
         if (itemId !== id) {
           const { index: oldIndex } = findIngredient(id);
           const { index: itemIndex } = findIngredient(itemId);
@@ -40,16 +50,10 @@ function BurgerConstructorItem({
     []
   );
   return (
-    <div ref={item => drag(drop(item))} className={styles.burgerCard}>
+    <div ref={(item) => drag(drop(item))} className={styles.burgerCard}>
       {children}
     </div>
   );
-}
-BurgerConstructorItem.propsTypes = {
-  children: PropTypes.node.isRequired,
-  toppingId: PropTypes.number.isRequired,
-  toppingIndex: PropTypes.number.isRequired,
-  findTopping: PropTypes.func.isRequired,
-  moveTopping: PropTypes.func.isRequired,
 };
+
 export default BurgerConstructorItem;

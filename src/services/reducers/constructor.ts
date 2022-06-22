@@ -1,10 +1,10 @@
 import {
   ActionConstructorTypes,
   ConstructorAction,
-} from "../actions/constructor/types";
-
-import { sortArray } from "../../helpers";
-import { ConstructorState } from "../../types";
+} from '../actions/constructor/types';
+//Для ревьюера случайно сделал типизацию стора раньше времени. Если будут замечения по стору в следующем спринте поправлю.
+import { sortArray } from '../../helpers';
+import { ConstructorState } from '../../types';
 const initialState: ConstructorState = {
   burderConstructor: {
     bun: [],

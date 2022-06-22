@@ -14,9 +14,10 @@ import BurgerConstructorItem from '../BurgerConstructorItem/BurgerConstructorIte
 import Loader from '../Icons/Loader';
 import styles from './BurgerConstructor.module.css';
 import classNames from 'classnames/bind';
+import { ingredientType } from '../../types';
 
 interface IBurgerCards {
-  onDropHandler: (itemId: any) => void;
+  onDropHandler: (itemId: { id: string }) => void;
 }
 
 export default function BurgerCards({ onDropHandler }: IBurgerCards) {
@@ -37,14 +38,13 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
   );
   const { isAuth } = useTypedSelector((state) => state.userState);
   const { loader } = useTypedSelector((state) => state.orderState);
-  const [hasDisabled, setHasDisabled] = useState(false);
+  const [hasDisabled, setHasDisabled] = useState<boolean>(false);
   const { bun, ingredients } = burderConstructor;
   const bunItem = bun?.[0];
 
   const [, dropIngredientCard] = useDrop({
     accept: 'ingredient-card',
-    drop(itemId) {
-      console.log(itemId, 'itemId');
+    drop(itemId: { id: string }) {
       onDropHandler(itemId);
     },
   });
@@ -64,8 +64,7 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bun, ingredients, dispatch, bunItem]);
 
-  const handlerName = (name: any, type: any) => {
-    console.log(name, type, 'handlerName');
+  const handlerName = (name: string, type: string | undefined) => {
     if (type) {
       if (type === 'top') {
         return `${name} (верх)`;
@@ -76,8 +75,7 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
     return name;
   };
 
-  const removeItem = (item: any, index: any) => {
-    console.log(item, index, 'removeItem');
+  const removeItem = (item: ingredientType, index: number) => {
     const findItem = ingredientsState.find((x) => x._id === item._id);
     if (findItem && findItem.__v > 0) {
       findItem.__v = findItem.__v - 1;
@@ -87,7 +85,6 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
 
   const orderAdd = async () => {
     setIsLoader(true);
-    console.log(isAuth, 'isAuth');
     if (!isAuth) {
       history.push('/login');
       setIsLoader(false);
@@ -101,13 +98,16 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
   };
 
   const findIngredient = useCallback(
-    (id) => {
-      const findItem: any = ingredients.find((x) => x._id === id);
-      console.log(findItem, 'findItem');
-      return {
-        findItem,
-        index: ingredients.indexOf(findItem),
-      };
+    (id: string) => {
+      const findItem: ingredientType | undefined = ingredients.find(
+        (x) => x._id === id
+      );
+      if (findItem) {
+        return {
+          findItem,
+          index: ingredients.indexOf(findItem),
+        };
+      }
     },
     [ingredients]
   );

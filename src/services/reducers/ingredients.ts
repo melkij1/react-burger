@@ -1,9 +1,9 @@
-import { ingredientType } from "../../types";
+import { ingredientType } from '../../types';
 import {
   ActionIngredientsTypes,
   IngredientAction,
-} from "../actions/ingredients/types";
-
+} from '../actions/ingredients/types';
+//Для ревьюера случайно сделал типизацию стора раньше времени. Если будут замечения по стору в следующем спринте поправлю.
 interface IngredientS {
   ingredients: ingredientType[];
   ingredientSelect: ingredientType | object;
@@ -17,7 +17,7 @@ const initialState: IngredientS = {
 };
 
 const clearIngredientsSelecteds = (arr: ingredientType[]) => {
-  arr.forEach(x => (x.__v = 0));
+  arr.forEach((x) => (x.__v = 0));
   return arr;
 };
 

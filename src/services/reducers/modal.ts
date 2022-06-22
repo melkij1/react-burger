@@ -1,11 +1,11 @@
-import { ActionModalTypes, ModalAction } from "../actions/modal/types";
-
+import { ActionModalTypes, ModalAction } from '../actions/modal/types';
+//Для ревьюера случайно сделал типизацию стора раньше времени. Если будут замечения по стору в следующем спринте поправлю.
 interface IState {
   modalMode: string;
   modalIsOpen: boolean;
 }
 const initialState: IState = {
-  modalMode: "",
+  modalMode: '',
   modalIsOpen: false,
 };
 

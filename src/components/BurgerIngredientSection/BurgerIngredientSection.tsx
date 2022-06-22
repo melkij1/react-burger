@@ -1,15 +1,15 @@
-import React from "react";
-import BurgerIngredient from "../BurgerIngredient/BurgerIngredient";
-import styles from "./BurgerIngredientSection.module.css";
-import classNames from "classnames/bind";
-import { ingredientType } from "../../types/index";
+import React from 'react';
+import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
+import styles from './BurgerIngredientSection.module.css';
+import classNames from 'classnames/bind';
+import { ingredientType } from '../../types/index';
 
 interface IComponent {
   title: string;
   ingredients: ingredientType[];
-  bunsRef: React.Ref<any>;
-  saucesRef: React.Ref<any>;
-  mainsRef: React.Ref<any>;
+  bunsRef: React.Ref<HTMLDivElement>;
+  saucesRef: React.Ref<HTMLDivElement>;
+  mainsRef: React.Ref<HTMLDivElement>;
 }
 function BurgerIngredientSection({
   title,
@@ -19,9 +19,9 @@ function BurgerIngredientSection({
   mainsRef,
 }: IComponent) {
   const refs = () => {
-    if (title === "Булки") {
+    if (title === 'Булки') {
       return bunsRef;
-    } else if (title === "Соусы") {
+    } else if (title === 'Соусы') {
       return saucesRef;
     } else {
       return mainsRef;
@@ -30,7 +30,7 @@ function BurgerIngredientSection({
 
   return (
     <div
-      className={classNames(styles.burgerIngredientSection, "mt-10")}
+      className={classNames(styles.burgerIngredientSection, 'mt-10')}
       ref={refs()}
     >
       <div className="title text text_type_main-medium mb-6">{title}</div>

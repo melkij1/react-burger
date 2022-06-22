@@ -12,12 +12,12 @@ import styles from './BurgerIngredient.module.css';
 interface IComponent {
   ingredient: ingredientType;
 }
-declare module "react" {
+declare module 'react' {
   interface FunctionComponent<P = {}> {
     (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
   }
 }
-export default function BurgerIngredient({ ingredient }:IComponent) {
+export default function BurgerIngredient({ ingredient }: IComponent) {
   const location = useLocation();
   const { setIngredientSelected, openModalAction } = useActions();
   const [{ opacity }, dragIngredient] = useDrag({
@@ -48,10 +48,7 @@ export default function BurgerIngredient({ ingredient }:IComponent) {
         >
           <div className="pl-4 pr-4">
             {ingredient.__v > 0 && (
-              <Counter
-                count={ingredient.__v}
-                size="default"
-              />
+              <Counter count={ingredient.__v} size="default" />
             )}
 
             <img src={ingredient.image} alt="" className="mb-1" />
