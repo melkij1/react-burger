@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, FC } from 'react';
 import ReactDOM from 'react-dom';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from './ModalOverlay';
@@ -11,16 +10,17 @@ interface IModal {
   children?: React.ReactNode;
   onClose: () => void;
 }
-function Modal({ show, children, onClose }: IModal) {
-  const overlayRef = useRef(null);
+const Modal: FC<IModal> = ({ show, children, onClose }) => {
+  const target: any = document.getElementById('modals');
+  const overlayRef = useRef<HTMLDivElement>(null);
   useHiddenScrollBody(show);
-  const closeOnEsc = (e: Event) => {
+  const closeOnEsc = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose();
     }
   };
 
-  const onOutside = (event: Event) => {
+  const onOutside = (event: React.MouseEvent<HTMLElement>) => {
     if (
       show &&
       overlayRef.current &&
@@ -67,9 +67,9 @@ function Modal({ show, children, onClose }: IModal) {
           {children}
         </div>
       </div>,
-      document.getElementById('modals')
+      target
     )
   );
-}
+};
 
 export default Modal;

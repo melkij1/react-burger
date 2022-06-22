@@ -1,18 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
-import classNames from "classnames/bind";
-import IconSuccess from "../Icons/IconSuccess";
-import styles from "./orderDetails.module.css";
-OrderDetails.propTypes = {
-  item: PropTypes.number.isRequired,
-};
-function OrderDetails({ item }) {
+import React from 'react';
+
+import classNames from 'classnames/bind';
+import IconSuccess from '../Icons/IconSuccess';
+import styles from './orderDetails.module.css';
+interface IOrderDetails {
+  item: number;
+}
+function OrderDetails({ item }: IOrderDetails) {
   return (
     <div className={styles.modalContent}>
       <div
         className={classNames(
           styles.modalOrderTitle,
-          " pt-15 text text_type_digits-large mb-8"
+          ' pt-15 text text_type_digits-large mb-8'
         )}
       >
         {item}
@@ -31,7 +31,7 @@ function OrderDetails({ item }) {
           <span
             className={classNames(
               styles.textDark,
-              "text text_type_main-default"
+              'text text_type_main-default'
             )}
           >
             Дождитесь готовности на орбитальной станции

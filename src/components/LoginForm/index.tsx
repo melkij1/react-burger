@@ -7,12 +7,12 @@ import {
 import classNames from 'classnames';
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import { useActions } from '../../hooks/useActions';
-
+import { Location } from 'history';
 import Loader from '../Icons/Loader';
 import styles from './styles.module.css';
 
 function LoginForm() {
-  const history = useHistory();
+  const history = useHistory<{ from: string }>();
   const { login } = useActions();
   const [loader, setLoader] = useState(false);
   const [form, setValue] = useState({ email: '', password: '' });

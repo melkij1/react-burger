@@ -27,8 +27,10 @@ function ResetForm() {
     if (form.code !== '') {
       setValue({ ...form, token });
       const res = await resetPassword(form);
-      if (res) {
+      if (res && res?.success) {
         history.push('/login');
+      } else {
+        return;
       }
     }
   };

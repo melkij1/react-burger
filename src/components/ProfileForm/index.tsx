@@ -8,6 +8,13 @@ import { useActions } from '../../hooks/useActions';
 
 import Loader from '../Icons/Loader';
 import styles from './index.module.css';
+
+declare module 'react' {
+  interface FunctionComponent<P = {}> {
+    (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
+  }
+}
+
 function ProfileForm() {
   const { getUserInformation, changeUserData } = useActions();
   const { user } = useTypedSelector((state) => state.userState);
@@ -59,13 +66,12 @@ function ProfileForm() {
             onChange={onChange}
             onIconClick={() => setFocusName(true)}
             onBlur={() => setFocusName(false)}
-            icon={isFocusName ? '' : 'EditIcon'}
+            icon={isFocusName ? 'CloseIcon' : 'EditIcon'}
             disabled={!isFocusName}
             value={form.name}
             name="name"
             error={false}
             errorText="Ошибка"
-            required
           />
         </div>
         <div className="form_group mb-6">
@@ -75,13 +81,12 @@ function ProfileForm() {
             onChange={onChange}
             onIconClick={() => setFocusEmail(true)}
             onBlur={() => setFocusEmail(false)}
-            icon={isFocusEmail ? '' : 'EditIcon'}
+            icon={isFocusEmail ? 'CloseIcon' : 'EditIcon'}
             disabled={!isFocusEmail}
             value={form.email}
             name="email"
             error={false}
             errorText="Ошибка"
-            required
           />
         </div>
         <div className="form_group mb-6">
@@ -91,21 +96,20 @@ function ProfileForm() {
             onChange={onChange}
             onIconClick={() => setFocusPassword(true)}
             onBlur={() => setFocusPassword(false)}
-            icon={isFocusPassword ? '' : 'EditIcon'}
+            icon={isFocusPassword ? 'CloseIcon' : 'EditIcon'}
             disabled={!isFocusPassword}
             value={form.password}
             name="password"
             error={false}
             errorText="Ошибка"
-            required
           />
         </div>
 
         <div className="form_group mb-6">
-          <Button type="secondary" size="medium" onClick={cancelClick}>
+          <Button type="secondary" size="medium" onClick={() => cancelClick}>
             Отмена
           </Button>
-          <Button type="primary" size="medium" onClick={submitForm}>
+          <Button type="primary" size="medium" onClick={() => submitForm}>
             Сохранить {loader ? <Loader /> : null}
           </Button>
         </div>

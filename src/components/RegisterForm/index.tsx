@@ -10,6 +10,13 @@ import classNames from 'classnames';
 import Loader from '../Icons/Loader';
 import { useActions } from '../../hooks/useActions';
 import styles from '../LoginForm/styles.module.css';
+
+declare module 'react' {
+  interface FunctionComponent<P = {}> {
+    (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
+  }
+}
+
 function RegisterForm() {
   const { register } = useActions();
 
@@ -66,7 +73,7 @@ function RegisterForm() {
         </div>
         <div className={classNames(styles.profile_form__group, 'mb-6')}>
           <PasswordInput
-            placeholder={'Пароль'}
+            // placeholder={'Пароль'}
             name={'password'}
             value={form.password}
             onChange={onChange}

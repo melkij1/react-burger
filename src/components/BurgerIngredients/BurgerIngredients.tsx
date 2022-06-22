@@ -6,16 +6,9 @@ import styles from './BurgerIngredients.module.css';
 import BurgerIngredientSection from '../BurgerIngredientSection/BurgerIngredientSection';
 import { ingredientType } from '../../types';
 
-// type TIngredientType = 'bun' | 'sauce' | 'main';
-export type ITypesIngredientObject = {
+export interface ITypesIngredientObject {
   [index: string]: ingredientType[];
-};
-
-// enum ITEIngredientObject {
-//   bun = 'Булки',
-//   sauce = 'Соусы',
-//   main = 'Начинки',
-// }
+}
 
 interface ITEIngredientObject {
   bun: 'Булки';

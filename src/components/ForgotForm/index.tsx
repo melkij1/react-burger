@@ -13,7 +13,9 @@ function RegisterForm() {
   const history = useHistory();
   const location = useLocation();
   const { forgotPassword } = useActions();
-  const { isAuth } = useTypedSelector((state) => state.userState);
+  const { isAuth, isForgotPasswordRequest } = useTypedSelector(
+    (state) => state.userState
+  );
   const [form, setValue] = useState({ email: '' });
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...form, [e.target.name]: e.target.value });
@@ -21,8 +23,8 @@ function RegisterForm() {
 
   const submitForm = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await forgotPassword(form);
-    if (res) {
+    await forgotPassword(form);
+    if (isForgotPasswordRequest) {
       history.push('/reset-password', { from: location });
     }
   };

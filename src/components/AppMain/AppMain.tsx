@@ -65,13 +65,13 @@ function AppMain() {
           <Profile />
         </Route>
       </Switch>
-      {background && (
+      {/* {background && (
         <Route path={'/ingredients/:id'}>
           <Modal show={true} onClose={() => closeModalIgredient()}>
             <IngredientsDetails />
           </Modal>
         </Route>
-      )}
+      )} */}
     </main>
   );
 }
