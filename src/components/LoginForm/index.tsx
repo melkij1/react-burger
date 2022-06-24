@@ -24,7 +24,7 @@ function LoginForm() {
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
-  const submitForm = async (e: React.ChangeEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoader(true);
     const res = await login(form);

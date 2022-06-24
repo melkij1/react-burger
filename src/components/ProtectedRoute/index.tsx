@@ -1,13 +1,7 @@
 import Cookies from 'js-cookie';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
 
-interface IProtectedRoute {
-  path: string;
-  exact?: boolean;
-  children?: React.ReactNode;
-}
-
-const ProtectedRoute = ({ path, exact, children }: IProtectedRoute) => {
+const ProtectedRoute = ({ path, exact, children }: RouteProps) => {
   const isAuth = Cookies.get('accessToken');
   return (
     <Route

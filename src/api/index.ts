@@ -110,11 +110,7 @@ export const fetchRequest = async (api: string): Promise<IRequest> => {
     }).then(checkResponse);
   };
 
-const checkResponse = (res: {
-  ok?: boolean;
-  json: () => Promise<ICheckResponse>;
-  status: any;
-}) => {
+const checkResponse = (res: Response) => {
   console.log(res, 'ress', JSON.stringify(res));
   if (res.ok) {
     return res.json();
@@ -123,12 +119,7 @@ const checkResponse = (res: {
   return Promise.reject(res.status);
 };
 
-const checkResponseGET = (res: {
-  ok?: boolean;
-  json: () => Promise<ICheckResponse>;
-  text(): Promise<string>;
-  status: any;
-}) => {
+const checkResponseGET = (res: Response) => {
   if (res.ok) {
     return res.json();
   }
