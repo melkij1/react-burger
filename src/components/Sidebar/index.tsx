@@ -1,12 +1,15 @@
 import React from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import classNames from 'classnames';
 import styles from './index.module.css';
 import { useActions } from '../../hooks/useActions';
 function Sidebar() {
   const { logoutUser } = useActions();
   const profilePage = useRouteMatch('/profile');
+  const profileOrdersPage = useRouteMatch('/profile/orders');
   const profilePageActive = profilePage && profilePage.isExact;
+  const profileOrdersPageActive =
+    profileOrdersPage && profileOrdersPage.isExact;
 
   const logout = () => {
     const res = logoutUser();
@@ -25,7 +28,15 @@ function Sidebar() {
               'text text_type_main-medium'
             )}
           >
-            Профиль
+            <Link
+              to={{ pathname: '/profile' }}
+              className={classNames(
+                styles.nav_item,
+                'text text_type_main-medium'
+              )}
+            >
+              Профиль
+            </Link>
           </li>
           <li
             className={classNames(
@@ -33,7 +44,15 @@ function Sidebar() {
               'text text_type_main-medium'
             )}
           >
-            История заказов
+            <Link
+              to="/profile/orders"
+              className={classNames(
+                styles.nav_item,
+                'text text_type_main-medium'
+              )}
+            >
+              История заказов
+            </Link>
           </li>
           <li
             className={classNames(

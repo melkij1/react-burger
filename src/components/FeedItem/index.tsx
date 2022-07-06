@@ -6,12 +6,14 @@ import styles from './style.module.css';
 import { Order } from '../../types';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { formatDate } from '../../helpers/time';
+import { useActions } from '../../hooks/useActions';
 interface IFeedItem {
   order: Order;
 }
 const FeedItem: FC<IFeedItem> = ({ order }) => {
   const location = useLocation();
   const history = useHistory();
+  const { openModalAction } = useActions();
   const { ingredients: ingredientsState } = useTypedSelector(
     (state) => state.ingredientsState
   );
@@ -22,52 +24,53 @@ const FeedItem: FC<IFeedItem> = ({ order }) => {
   };
   const price = useMemo(() => {
     let ingredientsPrice = 0;
-    if (wsConnected) {
-      if (ingredientsState === undefined) {
-        return 0;
-      }
-      order.ingredients.forEach((x) => {
-        let price: number;
-        if (ingredientsState && ingredientsState.length > 0) {
-          price = ingredientsState.find((i) => i?._id === x).price | 0;
-
-          if (price) {
-            ingredientsPrice += price;
-          }
-        }
-      });
-      return ingredientsPrice;
+    if (ingredientsState === undefined) {
+      return 0;
     }
-  }, [ingredientsState]);
-  // const price = (): number | undefined => {
-  //   let ingredientsPrice = 0;
-  //   if (ingredientsState === undefined) {
-  //     return 0;
-  //   }
-  //   order.ingredients.forEach((x) => {
-  //     if (ingredientsState.length) {
-  //       let price: number;
-  //       price = ingredientsState.find((i) => i?._id === x).price | 0;
+    order.ingredients.forEach((x) => {
+      let price: number;
+      if (ingredientsState && ingredientsState.length > 0) {
+        price = ingredientsState.find((i) => i?._id === x)!.price | 0;
 
-  //       if (price) {
-  //         ingredientsPrice += price;
-  //       }
-  //     }
-  //   });
-  //   return ingredientsPrice || 0;
-  // };
+        if (price) {
+          ingredientsPrice += price;
+        }
+      }
+    });
+    return ingredientsPrice;
+  }, [ingredientsState]);
+
+  const checkOrder = (order: Order): boolean => {
+    return (
+      order !== undefined &&
+      order != null &&
+      Object.keys(order).length > 0 &&
+      order.ingredients !== null &&
+      order.ingredients !== undefined &&
+      order.ingredients.length > 0
+    );
+  };
+  const clickOrder = () => {
+    if (checkOrder(order)) {
+      openModalAction({ modalIsOpen: true, mode: 'FeedDetails' });
+      history.push({
+        pathname: `/feed/${order._id}`,
+        state: {
+          background: location,
+        },
+      });
+    }
+  };
 
   if (!ingredientsState.length) {
     return null;
   }
+  // to={{
+  //   pathname: `/feed/${order._id}`,
+  //   state: { background: location },
+  // }}
   return (
-    <Link
-      className={cs(styles.feedItem, 'p-6 mr-2 mb-4')}
-      to={{
-        pathname: `/feed/${order._id}`,
-        state: { background: location },
-      }}
-    >
+    <div className={cs(styles.feedItem, 'p-6 mr-2 mb-4')} onClick={clickOrder}>
       <div className={cs(styles.feedItemTop, 'mb-6')}>
         <div className={cs(styles.number, 'text text_type_digits-default')}>
           {`#${order.number}`}
@@ -113,7 +116,7 @@ const FeedItem: FC<IFeedItem> = ({ order }) => {
           <CurrencyIcon type="primary" />
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

@@ -14,6 +14,7 @@ import Modal from '../Modal/Modal';
 import { Location } from 'history';
 import FeedPage from '../../pages/Feed';
 import { FeedDetails } from '../FeedDetails';
+import { ProfileOrder } from '../ProfileOrder';
 
 function AppMain() {
   // const location = useLocation<{ background?: Location }>();
@@ -34,6 +35,10 @@ function AppMain() {
     closeModalAction();
     history.push('/');
   };
+  const closeModalFeed = () => {
+    closeModalAction();
+    history.push('/feed');
+  };
   return (
     <main>
       <Switch location={background || location}>
@@ -52,9 +57,14 @@ function AppMain() {
         <Route exact path="/reset-password">
           <ResetPassword />
         </Route>
-        <ProtectedRoute path="/profile">
+        <ProtectedRoute exact path="/profile">
           <Profile>
             <ProfileForm />
+          </Profile>
+        </ProtectedRoute>
+        <ProtectedRoute exact path="/profile/orders">
+          <Profile>
+            <ProfileOrder />
           </Profile>
         </ProtectedRoute>
         <Route exact path="/ingredients/:id">
@@ -78,7 +88,7 @@ function AppMain() {
             </Modal>
           </Route>
           <Route exact path="/feed/:id">
-            <Modal show={true} onClose={() => closeModalIgredient()}>
+            <Modal show={true} onClose={() => closeModalFeed()}>
               <FeedDetails />
             </Modal>
           </Route>

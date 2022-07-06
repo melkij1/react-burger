@@ -85,6 +85,7 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
 
   const orderAdd = async () => {
     setIsLoader(true);
+    console.log(isAuth, 'isAuth');
     if (!isAuth) {
       history.push('/login');
       setIsLoader(false);

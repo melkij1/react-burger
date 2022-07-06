@@ -22,6 +22,7 @@
 }
 .modalContentMargin {
   margin-top: 180px;
+  margin-bottom: 150px;
 }
 .modalCloseButton {
   background: transparent;
@@ -126,4 +127,16 @@
   max-height: 312px;
   overflow: hidden;
   overflow-y: auto;
+}
+.ingredients_footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ingredient_cost {
+  display: flex;
+  align-items: center;
+}
+.ingredient_cost p {
+  margin-right: 9px;
 }

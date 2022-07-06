@@ -1,15 +1,20 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import classNames from 'classnames/bind';
 import styles from '../Modal/modal.module.css';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { ingredientType } from '../../types';
+import { WS_CONNECTION_START } from '../../services/actions/ws/types';
+import { formatDate } from '../../helpers/time';
 
 export const FeedDetails = () => {
+  const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
+
   const { modalIsOpen } = useTypedSelector((state) => state.modalState);
-  const { orders } = useTypedSelector((store) => store.feedState);
+  const { orders, wsConnected } = useTypedSelector((store) => store.feedState);
   const { ingredients } = useTypedSelector((state) => state.ingredientsState);
   // const order = orders.find((order) => order._id === id);
   const order = useMemo(() => {
@@ -26,16 +31,38 @@ export const FeedDetails = () => {
   }, [order, ingredients]);
 
   const orderTotalPrice = useMemo(() => {
-    console.log(findI, 'iii');
-    if (findI !== undefined) {
-      return findI?.reduce((sum, item) => sum + item?.price * item?.__v, 0);
-    } else {
-      return 0;
+    if (findI && findI.length) {
+      return findI.reduce((a, b) => a + b!.price, 0);
     }
-  }, [findI, ingredients]);
+  }, [findI, ingredients, wsConnected]);
+
+  const getStatus = (status: string): string => {
+    let text = '';
+
+    switch (status) {
+      case 'created':
+        text = 'Создан';
+        break;
+      case 'pending':
+        text = 'Готовится';
+        break;
+      case 'done':
+        text = 'Выполнен';
+        break;
+      default:
+    }
+
+    return text;
+  };
+
+  useEffect(() => {
+    if (!wsConnected) {
+      dispatch({ type: WS_CONNECTION_START });
+    }
+  }, []);
 
   if (!order) {
-    return null;
+    return <div className="">Загрузка...</div>;
   }
   return (
     <div
@@ -56,7 +83,7 @@ export const FeedDetails = () => {
             order.status === 'done' ? styles.done : ''
           }`}
         >
-          {order.status}
+          {getStatus(order.status)}
         </p>
         <h2 className="text text_type_main-medium mb-6 ">Состав:</h2>
         <div
@@ -68,7 +95,7 @@ export const FeedDetails = () => {
           {findI &&
             findI?.map((ingredient, idx) => (
               <div
-                className={styles.ingredientListItem}
+                className={classNames(styles.ingredientListItem, 'mb-4')}
                 key={`ingredientListItem${idx}_${ingredient?._id}`}
               >
                 <div className={classNames(styles.feedItemIngredient, 'mr-4')}>
@@ -87,9 +114,9 @@ export const FeedDetails = () => {
             ))}
         </div>
         <div className={styles.ingredients_footer}>
-          {/* <p className="text text_type_main-default text_color_inactive">{`${formatDistanceDayToNow(
-                createdAt
-              // )}, ${format(createdAt, "HH:mm 'i-'z")}`}</p> */}
+          <p className="text text_type_main-default text_color_inactive">
+            {formatDate(order.createdAt)}
+          </p>
           <div className={styles.ingredient_cost}>
             <p className="text text_type_digits-default">{orderTotalPrice}</p>
             <CurrencyIcon type="primary" />

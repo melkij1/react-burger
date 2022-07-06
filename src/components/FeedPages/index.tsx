@@ -12,11 +12,12 @@ const FeedPages = () => {
   );
   console.log(orders, 'orders');
   useEffect(() => {
-    if (!orders) {
-      dispatch({ type: WS_CONNECTION_START });
-    }
-  }, [dispatch, orders]);
+    dispatch({ type: WS_CONNECTION_START });
+  }, []);
 
+  if (!orders.length) {
+    return <div className={styles.feedLoader}>Загрузка...</div>;
+  }
   return (
     <div className="container">
       <h1 className="text text_type_main-large mt-10 mb-5 title">

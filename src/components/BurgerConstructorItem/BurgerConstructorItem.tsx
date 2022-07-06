@@ -18,7 +18,6 @@ const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
   findIngredient,
   sortIngredient,
 }) => {
-  console.log(findIngredient, 'findd');
   const [, drag] = useDrag(
     () => ({
       type: 'ingredients-sort',

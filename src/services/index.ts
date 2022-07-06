@@ -10,7 +10,9 @@ import {
   WS_SEND_MESSAGE,
 } from './actions/ws/types';
 import { socketMiddleware } from '../middleware/socketMiddleware';
+import { socketUserMiddleware } from '../middleware/socketUserMiddleware';
 const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
+const wsUserUrl = 'wss://norma.nomoreparties.space/orders';
 declare global {
   interface Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -28,5 +30,9 @@ declare global {
 //   (window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] as typeof compose) || compose;
 export const store = createStore(
   rootReducer,
-  applyMiddleware(thunk, socketMiddleware(wsUrl))
+  applyMiddleware(
+    thunk,
+    socketMiddleware(wsUrl),
+    socketUserMiddleware(wsUserUrl)
+  )
 );
