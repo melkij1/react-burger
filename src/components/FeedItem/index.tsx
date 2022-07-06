@@ -1,0 +1,120 @@
+import React, { FC, useMemo } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import cs from 'classnames';
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import styles from './style.module.css';
+import { Order } from '../../types';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { formatDate } from '../../helpers/time';
+interface IFeedItem {
+  order: Order;
+}
+const FeedItem: FC<IFeedItem> = ({ order }) => {
+  const location = useLocation();
+  const history = useHistory();
+  const { ingredients: ingredientsState } = useTypedSelector(
+    (state) => state.ingredientsState
+  );
+  const { wsConnected } = useTypedSelector((state) => state.feedState);
+
+  const findImages = (id: string): string | undefined => {
+    return ingredientsState.find((x) => x._id === id)?.image;
+  };
+  const price = useMemo(() => {
+    let ingredientsPrice = 0;
+    if (wsConnected) {
+      if (ingredientsState === undefined) {
+        return 0;
+      }
+      order.ingredients.forEach((x) => {
+        let price: number;
+        if (ingredientsState && ingredientsState.length > 0) {
+          price = ingredientsState.find((i) => i?._id === x).price | 0;
+
+          if (price) {
+            ingredientsPrice += price;
+          }
+        }
+      });
+      return ingredientsPrice;
+    }
+  }, [ingredientsState]);
+  // const price = (): number | undefined => {
+  //   let ingredientsPrice = 0;
+  //   if (ingredientsState === undefined) {
+  //     return 0;
+  //   }
+  //   order.ingredients.forEach((x) => {
+  //     if (ingredientsState.length) {
+  //       let price: number;
+  //       price = ingredientsState.find((i) => i?._id === x).price | 0;
+
+  //       if (price) {
+  //         ingredientsPrice += price;
+  //       }
+  //     }
+  //   });
+  //   return ingredientsPrice || 0;
+  // };
+
+  if (!ingredientsState.length) {
+    return null;
+  }
+  return (
+    <Link
+      className={cs(styles.feedItem, 'p-6 mr-2 mb-4')}
+      to={{
+        pathname: `/feed/${order._id}`,
+        state: { background: location },
+      }}
+    >
+      <div className={cs(styles.feedItemTop, 'mb-6')}>
+        <div className={cs(styles.number, 'text text_type_digits-default')}>
+          {`#${order.number}`}
+        </div>
+        <div className={cs(styles.date, 'text text_color_inactive')}>
+          {formatDate(order.createdAt)}
+        </div>
+      </div>
+      <div
+        className={cs(styles.feedItemName, 'text text_type_main-medium mb-6')}
+      >
+        {order.name}
+      </div>
+
+      <div className={styles.feedItemBottom}>
+        <div className={cs(styles.feedItemIngredients, 'pr-6')}>
+          {order.ingredients &&
+            order.ingredients.map((ingredient, index) =>
+              index <= 5 ? (
+                <div
+                  className={styles.feedItemIngredient}
+                  key={`feedItemIngredients_${ingredient}_${index}`}
+                >
+                  <img src={findImages(ingredient)} alt="" />
+                  {order.ingredients.length > 6 && index === 5 ? (
+                    <div
+                      className={cs(
+                        styles.count,
+                        'text text_type_digits-default text_type_main-medium'
+                      )}
+                    >
+                      +{order.ingredients.length - 6}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null
+            )}
+        </div>
+        <div className={styles.feedItemPrice}>
+          {ingredientsState ? (
+            <span className="text text_type_main-medium">{price}</span>
+          ) : null}
+          <CurrencyIcon type="primary" />
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+export default FeedItem;

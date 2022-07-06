@@ -35,3 +35,20 @@ export interface ConstructorState {
   };
   totalPrice: Number;
 }
+
+export interface OrderArray {
+  success: boolean;
+  orders: Order[];
+  total: number;
+  totalToday: number;
+}
+
+export interface Order {
+  ingredients: string[];
+  _id: string;
+  status: string;
+  number: number;
+  name?: string;
+  createdAt: string;
+  updatedAt: string;
+}

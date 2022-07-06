@@ -10,7 +10,12 @@ export const IngredientsActionCreators = {
         if (success && data) {
           dispatch({
             type: ActionIngredientsTypes.INGREDIENTS_FETCH,
-            payload: data,
+            payload: data || [],
+          });
+        } else {
+          dispatch({
+            type: ActionIngredientsTypes.INGREDIENTS_FETCH,
+            payload: [],
           });
         }
       })

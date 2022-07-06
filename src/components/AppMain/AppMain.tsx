@@ -12,6 +12,8 @@ import IngredientsDetails from '../IngredientDetails/IngredientDetails';
 import ProfileForm from '../ProfileForm';
 import Modal from '../Modal/Modal';
 import { Location } from 'history';
+import FeedPage from '../../pages/Feed';
+import { FeedDetails } from '../FeedDetails';
 
 function AppMain() {
   // const location = useLocation<{ background?: Location }>();
@@ -61,13 +63,26 @@ function AppMain() {
         <Route exact path="/logout">
           <Profile />
         </Route>
+        <Route exact path="/feed">
+          <FeedPage />
+        </Route>
+        <Route exact path="/feed/:id">
+          <FeedDetails />
+        </Route>
       </Switch>
       {background && (
-        <Route path={'/ingredients/:id'}>
-          <Modal show={true} onClose={() => closeModalIgredient()}>
-            <IngredientsDetails />
-          </Modal>
-        </Route>
+        <>
+          <Route path={'/ingredients/:id'}>
+            <Modal show={true} onClose={() => closeModalIgredient()}>
+              <IngredientsDetails />
+            </Modal>
+          </Route>
+          <Route exact path="/feed/:id">
+            <Modal show={true} onClose={() => closeModalIgredient()}>
+              <FeedDetails />
+            </Modal>
+          </Route>
+        </>
       )}
     </main>
   );
