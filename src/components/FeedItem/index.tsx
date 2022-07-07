@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import cs from 'classnames';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './style.module.css';
@@ -14,15 +14,16 @@ const FeedItem: FC<IFeedItem> = ({ order }) => {
   const location = useLocation();
   const history = useHistory();
   const { openModalAction } = useActions();
+  const profileOrders = useRouteMatch('/profile/orders');
+  const profileOrdersActive = profileOrders && profileOrders.isExact;
   const { ingredients: ingredientsState } = useTypedSelector(
     (state) => state.ingredientsState
   );
-  const { wsConnected } = useTypedSelector((state) => state.feedState);
 
   const findImages = (id: string): string | undefined => {
     return ingredientsState.find((x) => x._id === id)?.image;
   };
-  const price = useMemo(() => {
+  const price = useMemo((): number => {
     let ingredientsPrice = 0;
     if (ingredientsState === undefined) {
       return 0;
@@ -50,11 +51,15 @@ const FeedItem: FC<IFeedItem> = ({ order }) => {
       order.ingredients.length > 0
     );
   };
-  const clickOrder = () => {
+  const clickOrder = (): void => {
     if (checkOrder(order)) {
       openModalAction({ modalIsOpen: true, mode: 'FeedDetails' });
+      const pathname = profileOrdersActive
+        ? `/profile/orders/${order._id}`
+        : `/feed/${order._id}`;
+
       history.push({
-        pathname: `/feed/${order._id}`,
+        pathname,
         state: {
           background: location,
         },
@@ -62,15 +67,33 @@ const FeedItem: FC<IFeedItem> = ({ order }) => {
     }
   };
 
+  const getStatus = (status: string): string => {
+    let text = '';
+
+    switch (status) {
+      case 'created':
+        text = 'Создан';
+        break;
+      case 'pending':
+        text = 'Готовится';
+        break;
+      case 'done':
+        text = 'Выполнен';
+        break;
+      default:
+    }
+
+    return text;
+  };
+
   if (!ingredientsState.length) {
     return null;
   }
-  // to={{
-  //   pathname: `/feed/${order._id}`,
-  //   state: { background: location },
-  // }}
   return (
-    <div className={cs(styles.feedItem, 'p-6 mr-2 mb-4')} onClick={clickOrder}>
+    <div
+      className={cs(styles.feedItem, 'p-6 mr-2 mb-4 feedWrap')}
+      onClick={clickOrder}
+    >
       <div className={cs(styles.feedItemTop, 'mb-6')}>
         <div className={cs(styles.number, 'text text_type_digits-default')}>
           {`#${order.number}`}
@@ -80,10 +103,23 @@ const FeedItem: FC<IFeedItem> = ({ order }) => {
         </div>
       </div>
       <div
-        className={cs(styles.feedItemName, 'text text_type_main-medium mb-6')}
+        className={cs(
+          styles.feedItemName,
+          'text text_type_main-medium',
+          profileOrdersActive ? 'mb-2' : 'mb-6'
+        )}
       >
         {order.name}
       </div>
+      {profileOrdersActive ? (
+        <p
+          className={`text text_type_main-default mb-6 ${styles.status} ${
+            order.status === 'done' ? styles.done : ''
+          }`}
+        >
+          {getStatus(order.status)}
+        </p>
+      ) : null}
 
       <div className={styles.feedItemBottom}>
         <div className={cs(styles.feedItemIngredients, 'pr-6')}>

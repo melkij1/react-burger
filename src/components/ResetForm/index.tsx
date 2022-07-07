@@ -22,7 +22,6 @@ function ResetForm() {
   }>({ password: '', token: '', code: '' });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.name, '12312');
     setValue({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -32,7 +31,7 @@ function ResetForm() {
     if (form.code !== '') {
       setValue({ ...form, token });
       const res = await resetPassword(form);
-      console.log(res, 'submitForm reset password');
+
       if (res && res?.success) {
         history.push('/login');
       } else {

@@ -12,14 +12,13 @@ function Sidebar() {
     profileOrdersPage && profileOrdersPage.isExact;
 
   const logout = () => {
-    const res = logoutUser();
-    if (res) {
-      console.log(res, 'logout');
-    }
+    logoutUser();
+    // if (res) {
+    // }
   };
 
   return (
-    <div className={classNames(styles.sidebar, 'mr-15')}>
+    <div className={classNames(styles.sidebar, 'mr-15 sidebarWrap')}>
       <nav className={styles.nav}>
         <ul className={styles.nav_list}>
           <li

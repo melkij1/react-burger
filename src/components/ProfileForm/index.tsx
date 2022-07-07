@@ -42,7 +42,6 @@ function ProfileForm() {
   };
   const fetchUse = async () => {
     const res = await UserActionsCreator.getUserInformation()(dispatch);
-    console.log(res, 'ress fetch user');
     if (res && res?.success && res?.user) {
       setForm({ ...form, name: res.user.name, email: res.user.email });
     }

@@ -1,20 +1,25 @@
 import React, { useMemo, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useRouteMatch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import classNames from 'classnames/bind';
 import styles from '../Modal/modal.module.css';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ingredientType } from '../../types';
-import { WS_CONNECTION_START } from '../../services/actions/ws/types';
+import {
+  WS_CONNECTION_START,
+  WS_USER_CONNECTION_START,
+} from '../../services/actions/ws/types';
 import { formatDate } from '../../helpers/time';
 
 export const FeedDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
-
+  const profileOrders = useRouteMatch('/profile/orders');
+  const profileOrdersActive = profileOrders && profileOrders.isExact;
   const { modalIsOpen } = useTypedSelector((state) => state.modalState);
-  const { orders, wsConnected } = useTypedSelector((store) => store.feedState);
+  const { orders, wsConnected, wsConnectedUser } = useTypedSelector(
+    (store) => store.feedState
+  );
   const { ingredients } = useTypedSelector((state) => state.ingredientsState);
   // const order = orders.find((order) => order._id === id);
   const order = useMemo(() => {
@@ -56,7 +61,10 @@ export const FeedDetails = () => {
   };
 
   useEffect(() => {
-    if (!wsConnected) {
+    if (!wsConnectedUser && profileOrdersActive) {
+      dispatch({ type: WS_USER_CONNECTION_START });
+    }
+    if (!wsConnected && !profileOrdersActive) {
       dispatch({ type: WS_CONNECTION_START });
     }
   }, []);

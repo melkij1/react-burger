@@ -28,7 +28,6 @@ function RegisterForm() {
       history.push('/reset-password', { from: location });
     }
   };
-  console.log(isAuth, 'isAuth');
 
   if (Cookies.get('accessToken')) {
     return <Redirect to={'/profile'} />;

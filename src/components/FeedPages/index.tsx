@@ -10,7 +10,6 @@ const FeedPages = () => {
   const { orders, total, totalToday } = useTypedSelector(
     (store) => store.feedState
   );
-  console.log(orders, 'orders');
   useEffect(() => {
     dispatch({ type: WS_CONNECTION_START });
   }, []);
@@ -31,8 +30,6 @@ const FeedPages = () => {
             ))}
         </div>
         <FeedTotal orders={orders} total={total} totalToday={totalToday} />
-        {/* <BurgerIngredients />
-        <BurgerConstructor onDropHandler={handleDrop} /> */}
       </div>
     </div>
   );

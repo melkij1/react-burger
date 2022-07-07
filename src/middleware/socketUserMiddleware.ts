@@ -52,7 +52,7 @@ export const socketUserMiddleware =
             }
           }
           const { success, orders, total, totalToday } = JSON.parse(data);
-          console.log(JSON.parse(data), 'orders');
+
           if (success) {
             dispatch({
               type: WS_USER_GET_MESSAGE,

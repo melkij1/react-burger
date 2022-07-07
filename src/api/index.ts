@@ -116,7 +116,6 @@ export const fetchRequest = async (api: string): Promise<IRequest> => {
   };
 
 const checkResponse = (res: Response) => {
-  console.log(res, 'ress', JSON.stringify(res));
   if (res.ok) {
     return res.json();
   }

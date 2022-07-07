@@ -1,4 +1,6 @@
 import React from 'react';
+import { useRouteMatch } from 'react-router';
+import cs from 'classnames';
 import Sidebar from '../../components/Sidebar';
 
 export interface LayoutProps {
@@ -6,9 +8,16 @@ export interface LayoutProps {
 }
 
 function Profile({ children }: LayoutProps) {
+  const profileOrders = useRouteMatch('/profile/orders');
+  const profileOrdersActive = profileOrders && profileOrders.isExact;
   return (
     <div className="container">
-      <div className="lk-wrapper profile-wrapper">
+      <div
+        className={cs(
+          'lk-wrapper profile-wrapper',
+          profileOrdersActive ? 'profile-orders' : ''
+        )}
+      >
         <Sidebar />
         {children}
       </div>

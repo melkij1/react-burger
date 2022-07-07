@@ -3,6 +3,8 @@ import {
   WS_CONNECTION_CLOSED,
   WS_CONNECTION_SUCCESS,
   WS_GET_MESSAGE,
+  WS_USER_CONNECTION_CLOSED,
+  WS_USER_CONNECTION_SUCCESS,
   WS_USER_GET_MESSAGE,
 } from '../actions/ws/types';
 
@@ -12,17 +14,25 @@ interface IState {
   loader: boolean;
   total: number;
   totalToday: number;
+  totalUser: number;
+  totalTodayUser: number;
   wsConnected: boolean;
   wsConnectionFailed: boolean;
+  wsConnectedUser: boolean;
+  wsConnectionFailedUser: boolean;
 }
 const initialState: IState = {
   orders: [],
   ordersUser: [],
   total: 0,
   totalToday: 0,
+  totalUser: 0,
+  totalTodayUser: 0,
   loader: false,
   wsConnected: false,
   wsConnectionFailed: false,
+  wsConnectedUser: false,
+  wsConnectionFailedUser: false,
 };
 
 export default function orderReducer(
@@ -43,27 +53,31 @@ export default function orderReducer(
         total: action.payload.total,
         totalToday: action.payload.totalToday,
       };
-    case WS_USER_GET_MESSAGE:
-      return {
-        ...state,
-        ordersUser: action.payload.orders,
-      };
     case WS_CONNECTION_CLOSED:
       return {
         ...state,
         wsConnected: false,
         wsConnectionFailed: false,
       };
-    // case ActionOrderTypes.SET_ORDER:
-    //   return {
-    //     ...state,
-    //     orderNumber: action.payload,
-    //   };
-    // case ActionOrderTypes.SET_LOADER:
-    //   return {
-    //     ...state,
-    //     loader: action.payload,
-    //   };
+    case WS_USER_GET_MESSAGE:
+      return {
+        ...state,
+        orders: action.payload.orders,
+        totalUser: action.payload.total,
+        totalTodayUser: action.payload.totalToday,
+      };
+    case WS_USER_CONNECTION_SUCCESS:
+      return {
+        ...state,
+        wsConnectedUser: true,
+        wsConnectionFailedUser: false,
+      };
+    case WS_USER_CONNECTION_CLOSED:
+      return {
+        ...state,
+        wsConnectedUser: false,
+        wsConnectionFailedUser: false,
+      };
     default:
       return state;
   }

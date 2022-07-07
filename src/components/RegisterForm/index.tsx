@@ -37,7 +37,7 @@ function RegisterForm() {
     e.preventDefault();
     setLoader(true);
     const res = await UserActionsCreator.register(form)(dispatch);
-    console.log(res);
+
     setLoader(false);
   };
 

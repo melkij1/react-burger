@@ -28,7 +28,6 @@ function LoginForm() {
     e.preventDefault();
     setLoader(true);
     const res = await login(form);
-    console.log(res);
     setLoader(false);
   };
 
