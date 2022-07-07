@@ -98,15 +98,19 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
   };
 
   const findIngredient = useCallback(
-    (id: string) => {
-      const findItem: ingredientType | undefined = ingredients.find(
-        (x) => x._id === id
-      );
-      if (findItem) {
-        return {
-          findItem,
-          index: ingredients.indexOf(findItem),
-        };
+    (
+      id?: string | undefined
+    ): undefined | { findItem: ingredientType; index: number } => {
+      if (id) {
+        const findItem: ingredientType | undefined = ingredients.find(
+          (x) => x._id === id
+        );
+        if (findItem) {
+          return {
+            findItem,
+            index: ingredients.indexOf(findItem),
+          };
+        }
       }
     },
     [ingredients]

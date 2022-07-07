@@ -11,7 +11,8 @@ export const FeedTotal: FC<IFeedTotal> = ({ orders, total, totalToday }) => {
   const findDoneArray: Array<Order[]> | undefined = useMemo(() => {
     const doneArray = orders.filter((x) => x.status === 'done') || [];
     if (doneArray.length) {
-      return doneArray.reduce(
+      const arr = doneArray.slice(-20);
+      return arr.reduce(
         (p: Array<Order[]>, c: Order) => {
           if (p[p.length - 1].length === 10) {
             p.push([]);
@@ -47,7 +48,10 @@ export const FeedTotal: FC<IFeedTotal> = ({ orders, total, totalToday }) => {
           <div className={styles.feedTotalItem}>
             {findDoneArray &&
               findDoneArray.map((x, idx) => (
-                <div className={'mb-15'} key={`index_${idx}`}>
+                <div
+                  className={cs(styles.feedTotalItemW, 'mb-15')}
+                  key={`index_${idx}`}
+                >
                   <div className={cs(styles.title, 'mb-6')}>Готовы:</div>
                   <div className={styles.items}>
                     {x &&
@@ -68,7 +72,10 @@ export const FeedTotal: FC<IFeedTotal> = ({ orders, total, totalToday }) => {
           <div className={styles.feedTotalItem}>
             {findNotDoneArray &&
               findNotDoneArray.map((x, idx) => (
-                <div className={'mb-15'} key={`index_${idx}_not`}>
+                <div
+                  className={cs(styles.feedTotalItemW, 'mb-15')}
+                  key={`index_${idx}_not`}
+                >
                   <div className={cs(styles.title, 'mb-6')}>В работе:</div>
                   <div className={styles.items}>
                     {x &&

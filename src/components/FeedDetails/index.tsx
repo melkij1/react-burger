@@ -10,6 +10,7 @@ import {
   WS_USER_CONNECTION_START,
 } from '../../services/actions/ws/types';
 import { formatDate } from '../../helpers/time';
+import { ingredientType, Order } from '../../types';
 
 export const FeedDetails = () => {
   const dispatch = useDispatch();
@@ -29,15 +30,51 @@ export const FeedDetails = () => {
   }, [orders]);
   const findI = useMemo(() => {
     if (order) {
-      return order.ingredients?.map((id: string) =>
+      const ingredientsArray: ingredientType[] = [];
+      const arr = order.ingredients?.map((id: string) =>
         ingredients.find((ingredient) => ingredient._id === id)
       );
+      console.log(arr, 'arr');
+      arr.forEach((x) => {
+        console.log(x, 'xxx');
+        const find: boolean = ingredientsArray.some(
+          (ing) => ing._id === x!._id
+        );
+        if (find) {
+          console.log('fff', find);
+          const findElement = ingredientsArray.find(
+            (ing) => ing._id === x!._id
+          );
+          if (findElement) {
+            findElement.__v = findElement.__v + 1;
+          }
+          // find.__v = find.__v + 1;
+          return;
+        } else {
+          console.log('else', find);
+          if (x) {
+            ingredientsArray.push(x);
+          }
+          // if (find !== undefined) {
+          //   ingredientsArray.push(find);
+          // }
+        }
+      });
+      console.log(ingredientsArray, 'rrr');
+      return ingredientsArray;
     }
   }, [order, ingredients]);
 
   const orderTotalPrice = useMemo(() => {
+    console.log(findI, 'findiII');
     if (findI && findI.length) {
-      return findI.reduce((a, b) => a + b!.price, 0);
+      return findI.reduce((a, b) => {
+        if (b.__v !== 0) {
+          return a + b!.price * b!.__v;
+        } else {
+          return a + b!.price;
+        }
+      }, 0);
     }
   }, [findI, ingredients, wsConnected]);
 

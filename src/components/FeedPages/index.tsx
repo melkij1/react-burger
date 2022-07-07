@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import cs from 'classnames';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import styles from './style.module.css';
 import FeedItem from '../FeedItem';
@@ -14,6 +15,13 @@ const FeedPages = () => {
     dispatch({ type: WS_CONNECTION_START });
   }, []);
 
+  useEffect(() => {
+    return () => {
+      console.log('cleaned up');
+      // dispatch({ type: WS_CONNECTION_START });
+    };
+  }, []);
+
   if (!orders.length) {
     return <div className={styles.feedLoader}>Загрузка...</div>;
   }
@@ -23,7 +31,7 @@ const FeedPages = () => {
         Лента заказов
       </h1>
       <div className="row">
-        <div className={styles.feedItemsWrap}>
+        <div className={cs(styles.feedItemsWrap, 'customScroll')}>
           {orders &&
             orders.map((order, idx) => (
               <FeedItem key={`${order._id}_${idx}`} order={order} />

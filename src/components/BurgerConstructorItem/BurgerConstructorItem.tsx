@@ -7,7 +7,12 @@ interface IBurgerConstructorItem {
   children?: React.ReactNode;
   id: string;
   ingredientsIndex: number;
-  findIngredient: any;
+  findIngredient: (id?: string | undefined) =>
+    | {
+        index: number;
+        findItem: ingredientType;
+      }
+    | undefined;
   sortIngredient: (ingredientsIndex: number, droppedIndex: number) => void;
 }
 
@@ -25,8 +30,10 @@ const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
       end: (item, monitor) => {
         const { id, ingredientsIndex } = item;
         const didDrop = monitor.didDrop();
-        const { index: droppedIndex } = findIngredient(id);
-        if (!didDrop) {
+        // const { index: droppedIndex } = findIngredient(id);
+        const dropped = findIngredient(id);
+        if (!didDrop && dropped) {
+          const { index: droppedIndex } = dropped;
           sortIngredient(ingredientsIndex, droppedIndex);
         }
       },
@@ -40,9 +47,15 @@ const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
       canDrop: () => false,
       hover({ id: itemId }: any) {
         if (itemId !== id) {
-          const { index: oldIndex } = findIngredient(id);
-          const { index: itemIndex } = findIngredient(itemId);
-          sortIngredient(itemIndex, oldIndex);
+          // const { index: oldIndex } = findIngredient(id);
+          // const { index: itemIndex } = findIngredient(itemId);
+          const old = findIngredient(id);
+          const item = findIngredient(itemId);
+          if (old && item) {
+            const { index: oldIndex } = old;
+            const { index: itemIndex } = item;
+            sortIngredient(itemIndex, oldIndex);
+          }
         }
       },
     }),
