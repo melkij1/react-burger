@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useDrop } from 'react-dnd';
 import { useActions } from '../../hooks/useActions';
@@ -21,7 +20,6 @@ interface IBurgerCards {
 }
 
 export default function BurgerCards({ onDropHandler }: IBurgerCards) {
-  const dispatch = useDispatch();
   const history = useHistory();
   const {
     setPrice,
@@ -62,7 +60,8 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
       setHasDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bun, ingredients, dispatch, bunItem]);
+  }, [bun, ingredients, bunItem]);
+  // }, [bun, ingredients, dispatch, bunItem]);
 
   const handlerName = (name: string, type: string | undefined) => {
     if (type) {
@@ -120,7 +119,7 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
       sortIngredientActions({ index, atIndex });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch]
+    []
   );
   return (
     <>

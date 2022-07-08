@@ -14,7 +14,7 @@ declare module 'react' {
     (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
   }
 }
-
+//Для ревьюера на данной странице мне нужен диспатч, иначе с экшенов не вернется калбэк.
 function ProfileForm() {
   const dispatch = useDispatch();
   const { user } = useTypedSelector((state) => state.userState);

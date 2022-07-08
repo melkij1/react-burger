@@ -17,9 +17,8 @@ declare module 'react' {
     (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
   }
 }
-
+//Для ревьюера на данной странице мне нужен диспатч, иначе с экшенов не вернется калбэк.
 function RegisterForm() {
-  // const { register } = useActions();
   const dispatch = useDispatch();
   const [loader, setLoader] = useState<boolean>(false);
 
@@ -36,7 +35,7 @@ function RegisterForm() {
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoader(true);
-    const res = await UserActionsCreator.register(form)(dispatch);
+    await UserActionsCreator.register(form)(dispatch);
 
     setLoader(false);
   };

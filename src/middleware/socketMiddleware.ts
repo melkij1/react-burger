@@ -1,42 +1,41 @@
 import { Middleware, MiddlewareAPI } from 'redux';
-
-import {
-  WS_CONNECTION_CLOSED,
-  WS_CONNECTION_ERROR,
-  WS_CONNECTION_START,
-  WS_CONNECTION_STOP,
-  WS_CONNECTION_SUCCESS,
-  WS_GET_MESSAGE,
-  WS_SEND_MESSAGE,
-} from '../services/actions/ws/types';
-
+import { ActionWSTypes } from '../services/actions/ws/types';
+type wsActions = {
+  WS_CONNECTION_SUCCESS: string;
+  WS_CONNECTION_ERROR: string;
+  WS_CONNECTION_CLOSED: string;
+  WS_GET_MESSAGE: string;
+  WS_SEND_MESSAGE: string;
+  WS_CONNECTION_START: string;
+  WS_CONNECTION_STOP: string;
+};
 export const socketMiddleware =
-  (wsUrl: string): Middleware =>
+  (wsActions: wsActions): Middleware =>
   (store: MiddlewareAPI) => {
     let socket: WebSocket | null = null;
 
     return (next) => (action) => {
       const { dispatch } = store;
       const { type, payload } = action;
-      if (type === WS_CONNECTION_START) {
-        socket = new WebSocket(wsUrl);
+      if (type === wsActions.WS_CONNECTION_START) {
+        socket = new WebSocket(payload);
       }
 
-      if (type === WS_CONNECTION_STOP && socket !== null) {
+      if (type === wsActions.WS_CONNECTION_STOP && socket !== null) {
         socket.close(1000, 'Page closed by user');
       }
 
       if (socket) {
         socket.onopen = (event) => {
           dispatch({
-            type: WS_CONNECTION_SUCCESS,
+            type: ActionWSTypes.WS_CONNECTION_SUCCESS,
             payload: event,
           });
         };
 
         socket.onerror = (event) => {
           dispatch({
-            type: WS_CONNECTION_ERROR,
+            type: ActionWSTypes.WS_CONNECTION_ERROR,
             payload: event,
           });
         };
@@ -51,7 +50,7 @@ export const socketMiddleware =
           const { success, orders, total, totalToday } = JSON.parse(data);
           if (success) {
             dispatch({
-              type: WS_GET_MESSAGE,
+              type: ActionWSTypes.WS_GET_MESSAGE,
               payload: {
                 orders,
                 total,
@@ -62,10 +61,13 @@ export const socketMiddleware =
         };
 
         socket.onclose = (event) => {
-          dispatch({ type: WS_CONNECTION_CLOSED, payload: event });
+          dispatch({
+            type: ActionWSTypes.WS_CONNECTION_CLOSED,
+            payload: event,
+          });
         };
 
-        if (type === WS_SEND_MESSAGE) {
+        if (type === ActionWSTypes.WS_SEND_MESSAGE) {
           socket.send(JSON.stringify(payload));
         }
       }

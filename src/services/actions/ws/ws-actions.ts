@@ -1,47 +1,28 @@
-import {
-  WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_ERROR,
-  WS_CONNECTION_CLOSED,
-  WS_GET_MESSAGE,
-  WS_SEND_MESSAGE,
-  WS_USER_NAME_UPDATE,
-} from './types';
+import { ActionWSTypes, wsActions } from './types';
 
-export const wsConnectionSuccess = () => {
-  return {
-    type: WS_CONNECTION_SUCCESS,
-  };
-};
-
-export const wsConnectionError = () => {
-  return {
-    type: WS_CONNECTION_ERROR,
-  };
-};
-
-export const wsConnectionClosed = () => {
-  return {
-    type: WS_CONNECTION_CLOSED,
-  };
-};
-
-export const wsGetMessage = (message: string) => {
-  return {
-    type: WS_GET_MESSAGE,
-    payload: message,
-  };
-};
-
-export const wsSendMessage = (message: string) => {
-  return {
-    type: WS_SEND_MESSAGE,
-    payload: message,
-  };
-};
-
-export const wsUserNameUpdate = (userName: string) => {
-  return {
-    type: WS_USER_NAME_UPDATE,
-    payload: userName,
-  };
+export const WS = {
+  wsConnectionSuccess: (): wsActions => ({
+    type: ActionWSTypes.WS_CONNECTION_SUCCESS,
+  }),
+  wsConnectionStart: (payload: string): wsActions => ({
+    type: ActionWSTypes.WS_CONNECTION_START,
+    payload: payload,
+  }),
+  wsConnectionError: (): wsActions => ({
+    type: ActionWSTypes.WS_CONNECTION_ERROR,
+  }),
+  wsConnectionClosed: (): wsActions => ({
+    type: ActionWSTypes.WS_CONNECTION_CLOSED,
+  }),
+  wsConnectionGetMessage: (payload: any): wsActions => ({
+    type: ActionWSTypes.WS_GET_MESSAGE,
+    payload: payload,
+  }),
+  wsConnectionSengMessage: (payload: string): wsActions => ({
+    type: ActionWSTypes.WS_SEND_MESSAGE,
+    payload: payload,
+  }),
+  wsConnectionStop: (): wsActions => ({
+    type: ActionWSTypes.WS_CONNECTION_STOP,
+  }),
 };

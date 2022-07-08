@@ -1,15 +1,20 @@
+import Cookies from 'js-cookie';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { WS_USER_CONNECTION_START } from '../../services/actions/ws/types';
 import FeedItem from '../FeedItem';
 export const ProfileOrder = () => {
-  const dispatch = useDispatch();
-  const { orders, totalUser, totalTodayUser } = useTypedSelector(
-    (store) => store.feedState
-  );
+  const { wsConnectionStart, wsConnectionStop } = useActions();
+  const { orders } = useTypedSelector((store) => store.feedState);
   useEffect(() => {
-    dispatch({ type: WS_USER_CONNECTION_START });
+    const token = Cookies.get('accessToken')?.split('Bearer ')[1];
+    const url = `wss://norma.nomoreparties.space/orders?token=${token}`;
+    wsConnectionStart(url);
+  }, []);
+  useEffect(() => {
+    return () => {
+      wsConnectionStop();
+    };
   }, []);
 
   if (!orders.length) {

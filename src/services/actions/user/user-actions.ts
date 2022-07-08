@@ -2,8 +2,6 @@ import Cookies from 'js-cookie';
 import { post, get, patch } from '../../../api';
 import { ActionUserTypes, UserAction } from './types';
 import { Dispatch } from 'redux';
-// import { useDispatch } from 'react-redux';
-// const dispatch = useDispatch();
 export const UserActionsCreator = {
   updateToken: async () => {
     const payload = {
@@ -135,5 +133,8 @@ export const UserActionsCreator = {
     } else {
       return { success: false };
     }
+  },
+  setUserAuth: (payload: boolean) => (dispatch: Dispatch<UserAction>) => {
+    dispatch({ type: ActionUserTypes.SET_USERAUTH, payload: true });
   },
 };

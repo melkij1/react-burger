@@ -4,21 +4,20 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import styles from './style.module.css';
 import FeedItem from '../FeedItem';
 import { FeedTotal } from '../FeedTotal';
-import { useDispatch } from 'react-redux';
-import { WS_CONNECTION_START } from '../../services/actions/ws/types';
+import { useActions } from '../../hooks/useActions';
+
 const FeedPages = () => {
-  const dispatch = useDispatch();
+  const { wsConnectionStart, wsConnectionStop } = useActions();
   const { orders, total, totalToday } = useTypedSelector(
     (store) => store.feedState
   );
   useEffect(() => {
-    dispatch({ type: WS_CONNECTION_START });
+    wsConnectionStart('wss://norma.nomoreparties.space/orders/all');
   }, []);
 
   useEffect(() => {
     return () => {
-      console.log('cleaned up');
-      // dispatch({ type: WS_CONNECTION_START });
+      wsConnectionStop();
     };
   }, []);
 

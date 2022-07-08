@@ -1,12 +1,5 @@
 import { Order } from '../../types';
-import {
-  WS_CONNECTION_CLOSED,
-  WS_CONNECTION_SUCCESS,
-  WS_GET_MESSAGE,
-  WS_USER_CONNECTION_CLOSED,
-  WS_USER_CONNECTION_SUCCESS,
-  WS_USER_GET_MESSAGE,
-} from '../actions/ws/types';
+import { wsActions, ActionWSTypes } from '../actions/ws/types';
 
 interface IState {
   orders: Order[];
@@ -37,46 +30,37 @@ const initialState: IState = {
 
 export default function orderReducer(
   state = initialState,
-  action: any
+  action: wsActions
 ): IState {
   switch (action.type) {
-    case WS_CONNECTION_SUCCESS:
+    case ActionWSTypes.WS_CONNECTION_START:
+      return {
+        ...state,
+      };
+    case ActionWSTypes.WS_CONNECTION_SUCCESS:
       return {
         ...state,
         wsConnected: true,
         wsConnectionFailed: false,
       };
-    case WS_GET_MESSAGE:
+    case ActionWSTypes.WS_GET_MESSAGE:
       return {
         ...state,
         orders: action.payload.orders,
         total: action.payload.total,
         totalToday: action.payload.totalToday,
       };
-    case WS_CONNECTION_CLOSED:
+    case ActionWSTypes.WS_CONNECTION_CLOSED:
       return {
         ...state,
         wsConnected: false,
         wsConnectionFailed: false,
       };
-    case WS_USER_GET_MESSAGE:
+    case ActionWSTypes.WS_CONNECTION_STOP:
       return {
         ...state,
-        orders: action.payload.orders,
-        totalUser: action.payload.total,
-        totalTodayUser: action.payload.totalToday,
-      };
-    case WS_USER_CONNECTION_SUCCESS:
-      return {
-        ...state,
-        wsConnectedUser: true,
-        wsConnectionFailedUser: false,
-      };
-    case WS_USER_CONNECTION_CLOSED:
-      return {
-        ...state,
-        wsConnectedUser: false,
-        wsConnectionFailedUser: false,
+        wsConnected: false,
+        wsConnectionFailed: false,
       };
     default:
       return state;

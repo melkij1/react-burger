@@ -1,28 +1,22 @@
 import React, { useMemo, useEffect } from 'react';
 import { useParams, useRouteMatch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import classNames from 'classnames/bind';
 import styles from '../Modal/modal.module.css';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import {
-  WS_CONNECTION_START,
-  WS_USER_CONNECTION_START,
-} from '../../services/actions/ws/types';
 import { formatDate } from '../../helpers/time';
 import { ingredientType, Order } from '../../types';
+import { useActions } from '../../hooks/useActions';
+import Cookies from 'js-cookie';
 
 export const FeedDetails = () => {
-  const dispatch = useDispatch();
+  const { wsConnectionStart, wsConnectionStop } = useActions();
   const { id } = useParams<{ id: string }>();
-  const profileOrders = useRouteMatch('/profile/orders');
+  const profileOrders = useRouteMatch('/profile/orders/:id');
   const profileOrdersActive = profileOrders && profileOrders.isExact;
   const { modalIsOpen } = useTypedSelector((state) => state.modalState);
-  const { orders, wsConnected, wsConnectedUser } = useTypedSelector(
-    (store) => store.feedState
-  );
+  const { orders, wsConnected } = useTypedSelector((store) => store.feedState);
   const { ingredients } = useTypedSelector((state) => state.ingredientsState);
-  // const order = orders.find((order) => order._id === id);
   const order = useMemo(() => {
     if (orders.length) {
       return orders.find((order) => order._id === id);
@@ -34,39 +28,30 @@ export const FeedDetails = () => {
       const arr = order.ingredients?.map((id: string) =>
         ingredients.find((ingredient) => ingredient._id === id)
       );
-      console.log(arr, 'arr');
       arr.forEach((x) => {
-        console.log(x, 'xxx');
         const find: boolean = ingredientsArray.some(
           (ing) => ing._id === x!._id
         );
         if (find) {
-          console.log('fff', find);
           const findElement = ingredientsArray.find(
             (ing) => ing._id === x!._id
           );
           if (findElement) {
             findElement.__v = findElement.__v + 1;
           }
-          // find.__v = find.__v + 1;
           return;
         } else {
-          console.log('else', find);
           if (x) {
             ingredientsArray.push(x);
           }
-          // if (find !== undefined) {
-          //   ingredientsArray.push(find);
-          // }
         }
       });
-      console.log(ingredientsArray, 'rrr');
+
       return ingredientsArray;
     }
-  }, [order, ingredients]);
+  }, [orders, order, ingredients]);
 
   const orderTotalPrice = useMemo(() => {
-    console.log(findI, 'findiII');
     if (findI && findI.length) {
       return findI.reduce((a, b) => {
         if (b.__v !== 0) {
@@ -98,12 +83,20 @@ export const FeedDetails = () => {
   };
 
   useEffect(() => {
-    if (!wsConnectedUser && profileOrdersActive) {
-      dispatch({ type: WS_USER_CONNECTION_START });
+    if (!wsConnected && profileOrdersActive) {
+      const token = Cookies.get('accessToken')?.split('Bearer ')[1];
+      const url = `wss://norma.nomoreparties.space/orders?token=${token}`;
+      wsConnectionStart(url);
     }
     if (!wsConnected && !profileOrdersActive) {
-      dispatch({ type: WS_CONNECTION_START });
+      wsConnectionStart('wss://norma.nomoreparties.space/orders/all');
     }
+  }, []);
+  useEffect(() => {
+    return () => {
+      wsConnectionStop();
+      // dispatch({ type: WS_CONNECTION_START });
+    };
   }, []);
 
   if (!order) {
