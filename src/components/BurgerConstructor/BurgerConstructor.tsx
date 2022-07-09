@@ -97,20 +97,22 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
   };
 
   const findIngredient = useCallback(
-    (
-      id?: string | undefined
-    ): undefined | { findItem: ingredientType; index: number } => {
-      if (id) {
-        const findItem: ingredientType | undefined = ingredients.find(
-          (x) => x._id === id
-        );
-        if (findItem) {
-          return {
-            findItem,
-            index: ingredients.indexOf(findItem),
-          };
-        }
-      }
+    (id: string): { findItem: ingredientType; index: number } => {
+      // if (id) {
+      const findItem: ingredientType = ingredients.filter(
+        (x) => x._id === id
+      )[0];
+      return {
+        findItem,
+        index: ingredients.indexOf(findItem),
+      };
+      // if (findItem) {
+      //   return {
+      //     findItem,
+      //     index: ingredients.indexOf(findItem),
+      //   };
+      // }
+      // }
     },
     [ingredients]
   );

@@ -11,7 +11,7 @@ export interface ingredientType {
   image_mobile: string;
   image_large: string;
   __v: number;
-  uuid?: string;
+  uuid: string;
   position?: 'top' | 'bottom' | undefined;
   locker?: boolean;
 }

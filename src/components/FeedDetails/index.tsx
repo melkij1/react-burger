@@ -37,11 +37,17 @@ export const FeedDetails = () => {
             (ing) => ing._id === x!._id
           );
           if (findElement) {
-            findElement.__v = findElement.__v + 1;
+            if (findElement.type === 'bun' && findElement.__v < 2) {
+              findElement.__v = findElement.__v + 1;
+            }
           }
           return;
         } else {
           if (x) {
+            // x.__v = x.__v + 1;
+            if (x.__v === 0) {
+              x.__v = x.__v + 1;
+            }
             ingredientsArray.push(x);
           }
         }

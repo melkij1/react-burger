@@ -7,12 +7,10 @@ interface IBurgerConstructorItem {
   children?: React.ReactNode;
   id: string;
   ingredientsIndex: number;
-  findIngredient: (id?: string | undefined) =>
-    | {
-        index: number;
-        findItem: ingredientType;
-      }
-    | undefined;
+  findIngredient: (id: string) => {
+    index: number;
+    findItem: ingredientType;
+  };
   sortIngredient: (ingredientsIndex: number, droppedIndex: number) => void;
 }
 

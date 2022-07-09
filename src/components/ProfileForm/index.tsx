@@ -5,10 +5,10 @@ import {
   Input,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useActions } from '../../hooks/useActions';
-import { useDispatch } from 'react-redux';
 import Loader from '../Icons/Loader';
 import styles from './index.module.css';
 import { UserActionsCreator } from '../../services/actions/user/user-actions';
+import { useAppDispatch } from '../../services';
 declare module 'react' {
   interface FunctionComponent<P = {}> {
     (props: PropsWithChildren<P>, context?: any): ReactElement<any, any> | null;
@@ -16,7 +16,7 @@ declare module 'react' {
 }
 //Для ревьюера на данной странице мне нужен диспатч, иначе с экшенов не вернется калбэк.
 function ProfileForm() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { user } = useTypedSelector((state) => state.userState);
   const [loader, setLoader] = useState<boolean>(false);
   const [form, setForm] = useState<{

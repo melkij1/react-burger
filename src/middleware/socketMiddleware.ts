@@ -28,14 +28,14 @@ export const socketMiddleware =
       if (socket) {
         socket.onopen = (event) => {
           dispatch({
-            type: ActionWSTypes.WS_CONNECTION_SUCCESS,
+            type: wsActions.WS_CONNECTION_SUCCESS,
             payload: event,
           });
         };
 
         socket.onerror = (event) => {
           dispatch({
-            type: ActionWSTypes.WS_CONNECTION_ERROR,
+            type: wsActions.WS_CONNECTION_ERROR,
             payload: event,
           });
         };
@@ -50,7 +50,7 @@ export const socketMiddleware =
           const { success, orders, total, totalToday } = JSON.parse(data);
           if (success) {
             dispatch({
-              type: ActionWSTypes.WS_GET_MESSAGE,
+              type: wsActions.WS_GET_MESSAGE,
               payload: {
                 orders,
                 total,
@@ -62,12 +62,12 @@ export const socketMiddleware =
 
         socket.onclose = (event) => {
           dispatch({
-            type: ActionWSTypes.WS_CONNECTION_CLOSED,
+            type: wsActions.WS_CONNECTION_CLOSED,
             payload: event,
           });
         };
 
-        if (type === ActionWSTypes.WS_SEND_MESSAGE) {
+        if (type === wsActions.WS_SEND_MESSAGE) {
           socket.send(JSON.stringify(payload));
         }
       }

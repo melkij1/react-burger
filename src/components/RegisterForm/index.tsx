@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useDispatch } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import {
   Button,
@@ -11,6 +10,7 @@ import classNames from 'classnames';
 import Loader from '../Icons/Loader';
 import { UserActionsCreator } from '../../services/actions/user/user-actions';
 import styles from '../LoginForm/styles.module.css';
+import { useAppDispatch } from '../../services';
 
 declare module 'react' {
   interface FunctionComponent<P = {}> {
@@ -19,7 +19,7 @@ declare module 'react' {
 }
 //Для ревьюера на данной странице мне нужен диспатч, иначе с экшенов не вернется калбэк.
 function RegisterForm() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [loader, setLoader] = useState<boolean>(false);
 
   const [form, setValue] = useState<{
