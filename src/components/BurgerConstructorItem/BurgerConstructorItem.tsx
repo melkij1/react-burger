@@ -44,6 +44,9 @@ const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
       accept: 'ingredients-sort',
       canDrop: () => false,
       hover({ id: itemId }: any) {
+        if (itemId === id) {
+          return;
+        }
         if (itemId !== id) {
           // const { index: oldIndex } = findIngredient(id);
           // const { index: itemIndex } = findIngredient(itemId);
@@ -52,7 +55,10 @@ const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
           if (old && item) {
             const { index: oldIndex } = old;
             const { index: itemIndex } = item;
-            sortIngredient(itemIndex, oldIndex);
+            setImmediate(() => {
+              sortIngredient(itemIndex, oldIndex);
+            });
+            // sortIngredient(itemIndex, oldIndex);
           }
         }
       },
