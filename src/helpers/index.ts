@@ -5,7 +5,6 @@ export const sortArray = (
   from: number,
   to: number
 ) => {
-  console.log(array, from, to, 'sort');
   const el = array.splice(from, 1)[0];
   array.splice(to, 0, el);
   return array;

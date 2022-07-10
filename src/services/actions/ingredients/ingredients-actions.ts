@@ -9,7 +9,6 @@ export const IngredientsActionCreators = {
       .then((response) => {
         const { data, success } = response;
         if (success && data) {
-          console.log(data, 'data');
           dispatch({
             type: ActionIngredientsTypes.INGREDIENTS_FETCH,
             payload: data || [],

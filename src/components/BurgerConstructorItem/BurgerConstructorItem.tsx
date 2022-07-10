@@ -12,7 +12,7 @@ interface IBurgerConstructorItem {
     index: number;
     findItem: ingredientType;
   };
-  sortIngredient: (ingredientsIndex: string, droppedIndex: number) => void;
+  sortIngredient: (ingredientsIndex: number, droppedIndex: number) => void;
 }
 
 const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
@@ -34,7 +34,8 @@ const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
         const { uuid: droppedId, originalIndex } = item;
         const didDrop = monitor.didDrop();
         if (!didDrop) {
-          sortIngredient(droppedId, originalIndex);
+          const drooppedIndex = findIngredient(droppedId).index;
+          sortIngredient(drooppedIndex, originalIndex);
         }
       },
     }),
@@ -45,52 +46,17 @@ const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
       accept: 'ingredients-sort',
       hover(ingredient: ingredientType) {
         const { uuid: draggedId } = ingredient;
-        console.log(draggedId, 'Id', uuid);
+
         if (draggedId !== uuid) {
           const { index: overIndex } = findIngredient(uuid);
-          sortIngredient(draggedId, overIndex);
+          const draggedIndex = findIngredient(draggedId).index;
+          sortIngredient(draggedIndex, overIndex);
         }
       },
     }),
     [findIngredient, sortIngredient]
   );
-  // const ref = useRef<HTMLLIElement | undefined>(null);
-  // const [, drag] = useDrag(
-  //   () => ({
-  //     type: 'ingredients-sort',
-  //     item: { id: id, ingredientsIndex },
-  //     end: (item, monitor) => {
-  //       const { id, ingredientsIndex } = item;
-  //       const didDrop = monitor.didDrop();
-  //       const { index: droppedIndex } = findIngredient(id);
-  //       if (!didDrop) {
-  //         sortIngredient(ingredientsIndex, droppedIndex);
-  //       }
-  //     },
-  //   }),
-  //   [id, ingredientsIndex, sortIngredient]
-  // );
 
-  // const [, drop] = useDrop(
-  //   (): any => ({
-  //     accept: 'ingredients-sort',
-  //     canDrop: () => false,
-  //     hover({ id: itemId }: any) {
-  //       if (itemId !== id) {
-  //         // console.log(item,'item')
-  //         const { index: oldIndex } = findIngredient(id);
-  //         const { index: itemIndex } = findIngredient(itemId);
-  //         sortIngredient(itemIndex, oldIndex);
-  //         // const sort = sortIngredient(itemIndex, oldIndex)
-  //         // debounce(sortIngredient(itemIndex, oldIndex),500);
-  //         // debounce(moveIngredient, 300), [innerOrder]);
-  //       }
-  //     },
-  //   }),
-  //   []
-  // );
-  // drag(drop(drop));
-  // ref = (item) => drag(drop(item));
   const opacity = isDragging ? 0 : 1;
   return (
     <div
@@ -98,7 +64,6 @@ const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
       className={styles.burgerCard}
       style={{ opacity }}
     >
-      {/* <div ref={ref} className={styles.burgerCard}> */}
       {children}
     </div>
   );
