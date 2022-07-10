@@ -1,4 +1,6 @@
 .sidebar {
+  max-width: 320px;
+  width: 100%;
 }
 .nav {
 }
@@ -8,5 +10,8 @@
 }
 .nav_item {
   padding: 10px 0px;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
   cursor: pointer;
 }

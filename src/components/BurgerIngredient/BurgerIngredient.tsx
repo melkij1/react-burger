@@ -22,7 +22,8 @@ export default function BurgerIngredient({ ingredient }: IComponent) {
   const { setIngredientSelected, openModalAction } = useActions();
   const [{ opacity }, dragIngredient] = useDrag({
     type: 'ingredient-card',
-    item: { id: ingredient._id },
+    // item: { id: ingredient._id },
+    item: { uuid: ingredient._id },
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
     }),

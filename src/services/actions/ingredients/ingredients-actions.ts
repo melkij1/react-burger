@@ -1,16 +1,22 @@
 import { fetchRequest } from '../../../api/index';
 import { ingredientType } from '../../../types';
-import { ActionIngredientsTypes } from './types';
+import { ActionIngredientsTypes, IngredientAction } from './types';
+import { Dispatch } from 'redux';
 
 export const IngredientsActionCreators = {
-  getIngredients: () => (dispatch: any) => {
+  getIngredients: () => (dispatch: Dispatch<IngredientAction>) => {
     fetchRequest('/ingredients')
       .then((response) => {
         const { data, success } = response;
         if (success && data) {
           dispatch({
             type: ActionIngredientsTypes.INGREDIENTS_FETCH,
-            payload: data,
+            payload: data || [],
+          });
+        } else {
+          dispatch({
+            type: ActionIngredientsTypes.INGREDIENTS_FETCH,
+            payload: [],
           });
         }
       })

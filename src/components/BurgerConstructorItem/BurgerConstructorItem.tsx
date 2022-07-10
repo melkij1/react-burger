@@ -1,56 +1,69 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import debounce from 'lodash.debounce';
 import { ingredientType } from '../../types';
 import styles from '../BurgerConstructor/BurgerConstructor.module.css';
 
 interface IBurgerConstructorItem {
   children?: React.ReactNode;
-  id: string;
+  uuid: string;
   ingredientsIndex: number;
-  findIngredient: any;
+  findIngredient: (uuid: string) => {
+    index: number;
+    findItem: ingredientType;
+  };
   sortIngredient: (ingredientsIndex: number, droppedIndex: number) => void;
 }
 
 const BurgerConstructorItem: FC<IBurgerConstructorItem> = ({
   children,
-  id,
+  uuid,
   ingredientsIndex,
   findIngredient,
   sortIngredient,
 }) => {
-  console.log(findIngredient, 'findd');
-  const [, drag] = useDrag(
+  const originalIndex = findIngredient(uuid).index;
+  const [{ isDragging }, drag] = useDrag(
     () => ({
       type: 'ingredients-sort',
-      item: { id: id, ingredientsIndex },
+      item: { uuid, originalIndex },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
       end: (item, monitor) => {
-        const { id, ingredientsIndex } = item;
+        const { uuid: droppedId, originalIndex } = item;
         const didDrop = monitor.didDrop();
-        const { index: droppedIndex } = findIngredient(id);
         if (!didDrop) {
-          sortIngredient(ingredientsIndex, droppedIndex);
+          const drooppedIndex = findIngredient(droppedId).index;
+          sortIngredient(drooppedIndex, originalIndex);
         }
       },
     }),
-    [id, ingredientsIndex, sortIngredient]
+    [uuid, originalIndex, sortIngredient]
+  );
+  const [, drop] = useDrop(
+    () => ({
+      accept: 'ingredients-sort',
+      hover(ingredient: ingredientType) {
+        const { uuid: draggedId } = ingredient;
+
+        if (draggedId !== uuid) {
+          const { index: overIndex } = findIngredient(uuid);
+          const draggedIndex = findIngredient(draggedId).index;
+          sortIngredient(draggedIndex, overIndex);
+        }
+      },
+    }),
+    [findIngredient, sortIngredient]
   );
 
-  const [, drop] = useDrop(
-    (): any => ({
-      accept: 'ingredients-sort',
-      canDrop: () => false,
-      hover({ id: itemId }: any) {
-        if (itemId !== id) {
-          const { index: oldIndex } = findIngredient(id);
-          const { index: itemIndex } = findIngredient(itemId);
-          sortIngredient(itemIndex, oldIndex);
-        }
-      },
-    }),
-    []
-  );
+  const opacity = isDragging ? 0 : 1;
   return (
-    <div ref={(item) => drag(drop(item))} className={styles.burgerCard}>
+    <div
+      ref={(item) => drag(drop(item))}
+      className={styles.burgerCard}
+      style={{ opacity }}
+    >
       {children}
     </div>
   );

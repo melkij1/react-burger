@@ -3,6 +3,7 @@ import { Route, Redirect, RouteProps } from 'react-router-dom';
 
 const ProtectedRoute = ({ path, exact, children }: RouteProps) => {
   const isAuth = Cookies.get('accessToken');
+
   return (
     <Route
       path={path}

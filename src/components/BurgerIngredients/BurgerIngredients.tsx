@@ -23,7 +23,7 @@ function BurgerIngredients() {
     sauce: 'Соусы',
     main: 'Начинки',
   };
-  console.log(ingredientTypeTitles, 'ingredientTypeTitles');
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const bunsRef = useRef<HTMLDivElement>(null);
   const saucesRef = useRef<HTMLDivElement>(null);
@@ -40,8 +40,6 @@ function BurgerIngredients() {
     }
   });
 
-  console.log(sortItems, 'sortItems');
-
   const typesIngredient: ITypesIngredientObject = {};
 
   sortItems.forEach((item) => {
@@ -51,8 +49,6 @@ function BurgerIngredients() {
     }
     typesIngredient[type].push(item);
   });
-
-  console.log(typesIngredient, 'typesIngredient');
 
   const handleScroll = () => {
     const hasCurrent =

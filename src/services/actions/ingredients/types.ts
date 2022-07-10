@@ -1,10 +1,10 @@
-import { ingredientType } from "../../../types";
+import { ingredientType } from '../../../types';
 
 export enum ActionIngredientsTypes {
-  INGREDIENTS_FETCH = "INGREDIENTS_FETCH",
-  INGREDIENTS_ERROR = "INGREDIENTS_ERROR",
-  INGREDIENTS_SELECTED = "INGREDIENTS_SELECTED",
-  CLEAR_INGREDIENTS_SELECTEDS = "CLEAR_INGREDIENTS_SELECTEDS",
+  INGREDIENTS_FETCH = 'INGREDIENTS_FETCH',
+  INGREDIENTS_ERROR = 'INGREDIENTS_ERROR',
+  INGREDIENTS_SELECTED = 'INGREDIENTS_SELECTED',
+  CLEAR_INGREDIENTS_SELECTEDS = 'CLEAR_INGREDIENTS_SELECTEDS',
 }
 
 interface INGREDIENTS_FETCH {
@@ -21,7 +21,7 @@ interface SetIngredientSelected {
 }
 interface SetClearIngredientSelected {
   type: ActionIngredientsTypes.CLEAR_INGREDIENTS_SELECTEDS;
-  payload: { index: number; atIndex: number };
+  // payload: { index: number; atIndex: number };
 }
 
 export type IngredientAction =

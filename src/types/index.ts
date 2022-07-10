@@ -11,7 +11,7 @@ export interface ingredientType {
   image_mobile: string;
   image_large: string;
   __v: number;
-  uuid?: string;
+  uuid: string;
   position?: 'top' | 'bottom' | undefined;
   locker?: boolean;
 }
@@ -34,4 +34,21 @@ export interface ConstructorState {
     ingredients: ingredientType[];
   };
   totalPrice: Number;
+}
+
+export interface OrderArray {
+  success: boolean;
+  orders: Order[];
+  total: number;
+  totalToday: number;
+}
+
+export interface Order {
+  ingredients: string[];
+  _id: string;
+  status: string;
+  number: number;
+  name?: string;
+  createdAt: string;
+  updatedAt: string;
 }

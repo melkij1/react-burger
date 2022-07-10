@@ -1,12 +1,21 @@
-import { v4 as uuidv4 } from "uuid";
-import { ingredientType } from "../../../types";
-import { ConstructorAction, ActionConstructorTypes } from "./types";
+import { v4 as uuidv4 } from 'uuid';
+import { ingredientType } from '../../../types';
+import { ConstructorAction, ActionConstructorTypes } from './types';
 
 export const ConstructorActionCreators = {
-  setBun: (obj: ingredientType): ConstructorAction => ({
-    type: ActionConstructorTypes.SET_BUN,
-    payload: obj,
-  }),
+  setBun: (obj: ingredientType): ConstructorAction => {
+    const uuid = uuidv4();
+    const objClone = { ...obj };
+    const objNew = Object.assign(objClone, { uuid });
+    return {
+      type: ActionConstructorTypes.SET_BUN,
+      payload: objNew,
+    };
+  },
+  // ({
+  //   type: ActionConstructorTypes.SET_BUN,
+  //   payload: obj,
+  // }),
   setIngredient: (obj: ingredientType): ConstructorAction => {
     const uuid = uuidv4();
     const objClone = { ...obj };

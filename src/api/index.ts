@@ -37,14 +37,19 @@ export const fetchRequest = async (api: string): Promise<IRequest> => {
   },
   fetchPost = async (api: string, body: any): Promise<ICheckResponse> => {
     const url = `${BASE_URL}${api}`;
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+    if (Cookies.get('accessToken')) {
+      Object.assign(headers, { authorization: Cookies.get('accessToken') });
+    }
     return await fetch(url, {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({
         ingredients: body,
       }),
@@ -111,7 +116,6 @@ export const fetchRequest = async (api: string): Promise<IRequest> => {
   };
 
 const checkResponse = (res: Response) => {
-  console.log(res, 'ress', JSON.stringify(res));
   if (res.ok) {
     return res.json();
   }

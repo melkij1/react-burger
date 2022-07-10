@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useDrop } from 'react-dnd';
 import { useActions } from '../../hooks/useActions';
@@ -17,11 +16,10 @@ import classNames from 'classnames/bind';
 import { ingredientType } from '../../types';
 
 interface IBurgerCards {
-  onDropHandler: (itemId: { id: string }) => void;
+  onDropHandler: (itemId: { uuid: string }) => void;
 }
 
 export default function BurgerCards({ onDropHandler }: IBurgerCards) {
-  const dispatch = useDispatch();
   const history = useHistory();
   const {
     setPrice,
@@ -44,7 +42,7 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
 
   const [, dropIngredientCard] = useDrop({
     accept: 'ingredient-card',
-    drop(itemId: { id: string }) {
+    drop(itemId: { uuid: string }) {
       onDropHandler(itemId);
     },
   });
@@ -62,7 +60,8 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
       setHasDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bun, ingredients, dispatch, bunItem]);
+  }, [bun, ingredients, bunItem]);
+  // }, [bun, ingredients, dispatch, bunItem]);
 
   const handlerName = (name: string, type: string | undefined) => {
     if (type) {
@@ -98,25 +97,44 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
   };
 
   const findIngredient = useCallback(
-    (id: string) => {
-      const findItem: ingredientType | undefined = ingredients.find(
-        (x) => x._id === id
-      );
-      if (findItem) {
-        return {
-          findItem,
-          index: ingredients.indexOf(findItem),
-        };
-      }
+    (uuid: string) => {
+      // const findItem = ingredients.find((x) => x._id === id);
+      const findItem = ingredients.filter((i) => i.uuid === uuid)[0];
+      // if (findItem) {
+      return {
+        findItem,
+        index: ingredients.indexOf(findItem),
+      };
+      // }
     },
     [ingredients]
   );
+  // const findIngredient = useCallback(
+  //   (id: string): { findItem: ingredientType; index: number } => {
+  //     // if (id) {
+  //     const findItem: ingredientType = ingredients.filter(
+  //       (x) => x._id === id
+  //     )[0];
+  //     return {
+  //       findItem,
+  //       index: ingredients.indexOf(findItem),
+  //     };
+  //     // if (findItem) {
+  //     //   return {
+  //     //     findItem,
+  //     //     index: ingredients.indexOf(findItem),
+  //     //   };
+  //     // }
+  //     // }
+  //   },
+  //   [ingredients]
+  // );
   const sortIngredient = useCallback(
     (index, atIndex) => {
       sortIngredientActions({ index, atIndex });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch]
+    []
   );
   return (
     <>
@@ -150,7 +168,7 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
                   return (
                     <BurgerConstructorItem
                       key={item.uuid}
-                      id={item._id}
+                      uuid={item.uuid}
                       ingredientsIndex={index}
                       findIngredient={findIngredient}
                       sortIngredient={sortIngredient}

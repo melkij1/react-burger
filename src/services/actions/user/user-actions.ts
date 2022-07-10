@@ -2,8 +2,6 @@ import Cookies from 'js-cookie';
 import { post, get, patch } from '../../../api';
 import { ActionUserTypes, UserAction } from './types';
 import { Dispatch } from 'redux';
-// import { useDispatch } from 'react-redux';
-// const dispatch = useDispatch();
 export const UserActionsCreator = {
   updateToken: async () => {
     const payload = {
@@ -68,7 +66,6 @@ export const UserActionsCreator = {
   register:
     (form: { name: string; email: string; password: string }) =>
     (dispatch: Dispatch<UserAction>): Promise<boolean> => {
-      console.log(form, 'register');
       return post('/auth/register', form).then((res: any) => {
         if (res.success) {
           Cookies.set('accessToken', res.accessToken);
@@ -82,7 +79,6 @@ export const UserActionsCreator = {
   login:
     (form: { email: string; password: string }) =>
     async (dispatch: Dispatch<UserAction>) => {
-      console.log(form, 'login');
       const res = await post('/auth/login', form);
       if (res.success) {
         const time = new Date(new Date().getTime() + 20 * 60 * 1000);
@@ -98,31 +94,12 @@ export const UserActionsCreator = {
       } else {
         return false;
       }
-      // const res = post('/auth/login', form).then(res => {
-      //   return res
-      // });
-      // console.log(res, 'res login post');
-      // return post('/auth/login', form).then((res: any) => {
-      //   if (res.success) {
-      //     const time = new Date(new Date().getTime() + 20 * 60 * 1000);
-      //     Cookies.set('accessToken', res.accessToken, {
-      //       expires: time,
-      //     });
-      //     Cookies.set('refreshToken', res.refreshToken);
-      //     dispatch({ type: ActionUserTypes.SET_USER, payload: res.user });
-      //     dispatch({ type: ActionUserTypes.SET_USERAUTH, payload: true });
-      //     return true;
-      //   }
-      //   return false;
-      // });
     },
   changeUserData:
     (form: { name: string; email: string; password: string }) =>
     async (dispatch: Dispatch<UserAction>): Promise<boolean> => {
-      console.log(form, 'changeUserData');
       if (!Cookies.get('accessToken')) {
         const resToken = await UserActionsCreator.updateToken();
-        console.log(resToken, 'getUserInformation res toekn');
       }
       const response = await patch('/auth/user', form);
       if (response && response.success) {
@@ -138,7 +115,6 @@ export const UserActionsCreator = {
   }> => {
     return get('/auth/user')
       .then((response: any) => {
-        console.log(response, 'getUser');
         return response;
       })
       .catch((error) => {
@@ -152,43 +128,13 @@ export const UserActionsCreator = {
     const resposnse = await UserActionsCreator.getUser();
     if (resposnse && resposnse.success) {
       dispatch({ type: ActionUserTypes.SET_USER, payload: resposnse.user });
-      console.log(resposnse, 'getUserInformation');
+
       return resposnse;
     } else {
       return { success: false };
     }
-    // return await UserActionsCreator.getUser()
-    //   .then(async (res: any) => {
-    //     if (res.success) {
-    //       dispatch({ type: ActionUserTypes.SET_USER, payload: res.user });
-    //       return res;
-    //     }
-    //   })
-    //   .catch(async (error) => {
-    //     console.log(error, 'error');
-    //   });
   },
-  // getUserInformation: () => async (dispatch: Dispatch<UserAction>) => {
-  //   if (!Cookies.get('accessToken')) {
-  //     await UserActionsCreator.updateToken();
-  //   }
-  //   const resposnse = await UserActionsCreator.getUser();
-  //   if (resposnse && resposnse.success) {
-  //     dispatch({ type: ActionUserTypes.SET_USER, payload: resposnse.user });
-  //     console.log(resposnse, 'getUserInformation');
-  //     return resposnse;
-  //   } else {
-  //     return { success: false };
-  //   }
-  //   // return await UserActionsCreator.getUser()
-  //   //   .then(async (res: any) => {
-  //   //     if (res.success) {
-  //   //       dispatch({ type: ActionUserTypes.SET_USER, payload: res.user });
-  //   //       return res;
-  //   //     }
-  //   //   })
-  //   //   .catch(async (error) => {
-  //   //     console.log(error, 'error');
-  //   //   });
-  // },
+  setUserAuth: (payload: boolean) => (dispatch: Dispatch<UserAction>) => {
+    dispatch({ type: ActionUserTypes.SET_USERAUTH, payload: true });
+  },
 };

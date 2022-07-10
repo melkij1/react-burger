@@ -1,0 +1,37 @@
+.feedTotal {
+  max-width: 580px;
+  width: 100%;
+  margin-left: 60px;
+}
+.feedTotalTop {
+  display: flex;
+  flex-wrap: wrap;
+}
+.feedTotalItem {
+  display: flex;
+  /* flex-direction: column; */
+}
+.feedTotalTopLeft .feedTotalItem span {
+  color: #00cccc;
+}
+.feedTotalTopLeft,
+.feedTotalTopRight {
+  /* max-width: 272px; */
+  max-width: 100%;
+  width: 100%;
+}
+.feedTotalItem div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.feedTotalItem .feedTotalItemW {
+  max-width: 272px;
+  width: 100%;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+}

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from './ModalOverlay';
 import classNames from 'classnames/bind';
-import { useHiddenScrollBody } from '../../hooks/useHiddenScrollBody';
+// import { useHiddenScrollBody } from '../../hooks/useHiddenScrollBody';
 import styles from './modal.module.css';
 interface IModal {
   show: boolean;
@@ -13,7 +13,7 @@ interface IModal {
 const Modal: FC<IModal> = ({ show, children, onClose }) => {
   const target: any = document.getElementById('modals');
   const overlayRef = useRef<HTMLDivElement>(null);
-  useHiddenScrollBody(show);
+  // useHiddenScrollBody(show);
   const closeOnEsc = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose();
@@ -47,6 +47,15 @@ const Modal: FC<IModal> = ({ show, children, onClose }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show, overlayRef]);
+
+  useEffect(() => {
+    if (show) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [show]);
 
   if (show) {
     return (

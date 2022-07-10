@@ -1,0 +1,7 @@
+.feedItemsWrap {
+  max-width: 584px;
+  width: 100%;
+  max-height: calc(100vh - 200px);
+  overflow: hidden;
+  overflow-y: auto;
+}

@@ -8,8 +8,9 @@ export default function Main() {
   const { ingredients } = useTypedSelector((state) => state.ingredientsState);
   const { burderConstructor } = useTypedSelector((state) => state.burgerState);
   const { bun } = burderConstructor;
-  const handleDrop = (itemId: { id: string }) => {
-    const item = ingredients.find((x) => x._id === itemId.id);
+  const handleDrop = (itemId: { uuid: string }) => {
+    const item = ingredients.find((x) => x._id === itemId.uuid);
+
     if (item) {
       if (bun.length === 1 && item.type === 'bun') {
         bun[0].__v = 0;
