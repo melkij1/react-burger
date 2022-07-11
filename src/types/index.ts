@@ -54,7 +54,7 @@ export interface ConstructorState {
 }
 
 export interface OrderArray {
-  success: boolean;
+  success?: boolean;
   orders: Order[];
   total: number;
   totalToday: number;

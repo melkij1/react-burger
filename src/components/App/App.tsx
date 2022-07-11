@@ -16,7 +16,7 @@ function App() {
     fetchData();
     //react-hooks/exhaustive-deps
     if (Cookies.get('accessToken')) {
-      setUserAuth(true);
+      setUserAuth();
     }
   }, [fetchData]);
 
