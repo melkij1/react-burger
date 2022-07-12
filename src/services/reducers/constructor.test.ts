@@ -65,12 +65,15 @@ describe('Проверка редьюсера ConstructorReducer', () => {
       },
     });
   });
-  it('Проверка на сортировку ингредиенов в конструктор', () => {
+  it('Проверка на сортировку ингредиентов в конструктор', () => {
     const index = 0;
     const atIndex = 1;
-    reducer(initialState, allActionCreators.setIngredient(dataItemIngredients));
-    reducer(
+    const res1 = reducer(
       initialState,
+      allActionCreators.setIngredient(dataItemIngredients)
+    );
+    const res2 = reducer(
+      res1,
       allActionCreators.setIngredient(dataItem2Ingredients)
     );
     const ingredients = [
@@ -78,7 +81,7 @@ describe('Проверка редьюсера ConstructorReducer', () => {
       { ...dataItemIngredients, uuid: '8888' },
     ];
     const result = reducer(
-      initialState,
+      res2,
       allActionCreators.sortIngredientActions({ index, atIndex })
     );
     expect(result).toEqual({
