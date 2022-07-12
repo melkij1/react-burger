@@ -65,33 +65,32 @@ describe('Проверка редьюсера ConstructorReducer', () => {
       },
     });
   });
-  //TODO:поправить
-  // it('Проверка на сортировку ингредиенов в конструктор', () => {
-  //   const index = 0;
-  //   const atIndex = 1;
-  //   reducer(initialState, allActionCreators.setIngredient(dataItemIngredients));
-  //   reducer(
-  //     initialState,
-  //     allActionCreators.setIngredient(dataItem2Ingredients)
-  //   );
-  //   console.log(initialState.burderConstructor.ingredients.length, 'rrr');
-  //   const ingredients = [
-  //     { ...dataItem2Ingredients, uuid: '8888' },
-  //     { ...dataItemIngredients, uuid: '8888' },
-  //   ];
-  //   expect(
-  //     reducer(
-  //       initialState,
-  //       allActionCreators.sortIngredientActions({ index, atIndex })
-  //     )
-  //   ).toEqual({
-  //     ...initialState,
-  //     burderConstructor: {
-  //       ingredients,
-  //       bun: [],
-  //     },
-  //   });
-  // });
+  it('Проверка на сортировку ингредиенов в конструктор', () => {
+    const index = 0;
+    const atIndex = 1;
+    reducer(initialState, allActionCreators.setIngredient(dataItemIngredients));
+    reducer(
+      initialState,
+      allActionCreators.setIngredient(dataItem2Ingredients)
+    );
+    console.log(initialState.burderConstructor.ingredients.length, 'rrr');
+    const ingredients = [
+      { ...dataItem2Ingredients, uuid: '8888' },
+      { ...dataItemIngredients, uuid: '8888' },
+    ];
+    expect(
+      reducer(
+        initialState,
+        allActionCreators.sortIngredientActions({ index, atIndex })
+      )
+    ).toEqual({
+      ...initialState,
+      burderConstructor: {
+        ingredients,
+        bun: [],
+      },
+    });
+  });
   it('Проверка на добавление цены', () => {
     const price = 1000;
     expect(reducer(initialState, allActionCreators.setPrice(price))).toEqual({

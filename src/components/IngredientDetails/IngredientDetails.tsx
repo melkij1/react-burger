@@ -14,8 +14,10 @@ const IngredientDetails = () => {
       className={classNames(
         styles.modalContent,
         styles.modalContentIngredient,
-        !modalIsOpen ? styles.modalContentMargin : ''
+        !modalIsOpen ? styles.modalContentMargin : '',
+        'modal-wrap'
       )}
+      data-test-id="modal"
     >
       <div className="modalHeader text text_type_main-large">
         Детали ингредиента

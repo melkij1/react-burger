@@ -69,7 +69,7 @@ const Modal: FC<IModal> = ({ show, children, onClose }) => {
           >
             <button
               type="button"
-              className={styles.modalCloseButton}
+              className={classNames(styles.modalCloseButton, 'btn-close-modal')}
               onClick={onClose}
             >
               <CloseIcon type="primary" />
