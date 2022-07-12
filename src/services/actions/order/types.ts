@@ -1,6 +1,6 @@
 export enum ActionOrderTypes {
-  SET_ORDER = "SET_ORDER",
-  SET_LOADER = "SET_LOADER",
+  SET_ORDER = 'SET_ORDER',
+  SET_LOADER = 'SET_LOADER',
 }
 
 interface setIsLoader {
@@ -11,5 +11,9 @@ interface setOrder {
   type: ActionOrderTypes.SET_ORDER;
   payload: number;
 }
+interface setOrderNumber {
+  type: ActionOrderTypes.SET_ORDER;
+  payload: number;
+}
 
-export type OrderAction = setOrder | setIsLoader;
+export type OrderAction = setOrder | setIsLoader | setOrderNumber;

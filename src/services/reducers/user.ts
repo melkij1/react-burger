@@ -5,7 +5,7 @@ interface IState {
   isForgotPasswordRequest: boolean;
   isAuth: boolean;
 }
-const initialState: IState = {
+export const initialState: IState = {
   user: null,
   isForgotPasswordRequest: false,
   isAuth: false,

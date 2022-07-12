@@ -15,6 +15,23 @@ export interface ingredientType {
   position?: 'top' | 'bottom' | undefined;
   locker?: boolean;
 }
+export interface ingredientTypeForTesting {
+  _id: string;
+  name: string;
+  type: string;
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
+  price: number;
+  image: string;
+  image_mobile: string;
+  image_large: string;
+  __v: number;
+  uuid?: string;
+  position?: 'top' | 'bottom' | undefined;
+  locker?: boolean;
+}
 
 export interface orderType {
   _id: string;
@@ -37,7 +54,7 @@ export interface ConstructorState {
 }
 
 export interface OrderArray {
-  success: boolean;
+  success?: boolean;
   orders: Order[];
   total: number;
   totalToday: number;

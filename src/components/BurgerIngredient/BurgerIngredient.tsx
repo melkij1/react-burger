@@ -36,6 +36,7 @@ export default function BurgerIngredient({ ingredient }: IComponent) {
     <>
       <div
         className={classNames(styles.burgerItem, 'mb-8')}
+        data-test-id="ingredient"
         onClick={openModal}
         ref={dragIngredient}
         style={{ opacity }}

@@ -1,3 +1,4 @@
+import { OrderArray } from '../../../types';
 import { ActionWSTypes, wsActions } from './types';
 
 export const WS = {
@@ -14,7 +15,7 @@ export const WS = {
   wsConnectionClosed: (): wsActions => ({
     type: ActionWSTypes.WS_CONNECTION_CLOSED,
   }),
-  wsConnectionGetMessage: (payload: any): wsActions => ({
+  wsConnectionGetMessage: (payload: OrderArray): wsActions => ({
     type: ActionWSTypes.WS_GET_MESSAGE,
     payload: payload,
   }),

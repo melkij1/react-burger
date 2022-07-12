@@ -142,6 +142,7 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
         <div className={styles.burgerCards}>
           <div
             className={styles.BurgerConstructorsWrapper}
+            data-test-id="burder-constructor"
             ref={dropIngredientCard}
           >
             {bunItem && (
@@ -215,6 +216,7 @@ export default function BurgerCards({ onDropHandler }: IBurgerCards) {
             <Button
               type="primary"
               size="medium"
+              data-test-id="order"
               onClick={orderAdd}
               disabled={hasDisabled}
             >

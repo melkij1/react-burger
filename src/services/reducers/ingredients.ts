@@ -10,7 +10,7 @@ interface IngredientS {
   error: boolean;
 }
 
-const initialState: IngredientS = {
+export const initialState: IngredientS = {
   ingredients: [],
   ingredientSelect: {},
   error: false,

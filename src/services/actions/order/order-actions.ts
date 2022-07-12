@@ -19,10 +19,11 @@ export const OrderActionCreators = {
         .then((response): void => {
           const { success, order } = response;
           if (success && order) {
-            dispatch({
-              type: ActionOrderTypes.SET_ORDER,
-              payload: order?.number,
-            });
+            // dispatch({
+            //   type: ActionOrderTypes.SET_ORDER,
+            //   payload: order?.number,
+            // });
+            OrderActionCreators.setOrderNumber(order?.number);
             dispatch({
               type: ActionModalTypes.OPENMODAL,
               payload: { modalIsOpen: true, mode: 'orderDetails' },
@@ -43,5 +44,9 @@ export const OrderActionCreators = {
   setIsLoader: (flag: boolean): OrderAction => ({
     type: ActionOrderTypes.SET_LOADER,
     payload: flag,
+  }),
+  setOrderNumber: (number: number): OrderAction => ({
+    type: ActionOrderTypes.SET_ORDER,
+    payload: number,
   }),
 };

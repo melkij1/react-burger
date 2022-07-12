@@ -5,7 +5,7 @@ import {
 //Для ревьюера случайно сделал типизацию стора раньше времени. Если будут замечения по стору в следующем спринте поправлю.
 import { sortArray } from '../../helpers';
 import { ConstructorState } from '../../types';
-const initialState: ConstructorState = {
+export const initialState: ConstructorState = {
   burderConstructor: {
     bun: [],
     ingredients: [],

@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie';
 import { post, get, patch } from '../../../api';
-import { ActionUserTypes, UserAction } from './types';
+import { ActionUserTypes, IUser, UserAction } from './types';
 import { Dispatch } from 'redux';
+
 export const UserActionsCreator = {
   updateToken: async () => {
     const payload = {
@@ -37,10 +38,11 @@ export const UserActionsCreator = {
       try {
         return post('/password-reset', form).then((res) => {
           if (res.success) {
-            dispatch({
-              type: ActionUserTypes.SET_FORGOT_PASSWORD,
-              payload: true,
-            });
+            UserActionsCreator.setForgotPassword(true);
+            // dispatch({
+            //   type: ActionUserTypes.SET_FORGOT_PASSWORD,
+            //   payload: true,
+            // });
             return true;
           }
           return false;
@@ -70,7 +72,8 @@ export const UserActionsCreator = {
         if (res.success) {
           Cookies.set('accessToken', res.accessToken);
           Cookies.set('refreshToken', res.refreshToken);
-          dispatch({ type: ActionUserTypes.SET_USER, payload: res.user });
+          UserActionsCreator.setUser(res.user);
+          // dispatch({ type: ActionUserTypes.SET_USER, payload: res.user });
           return true;
         }
         return false;
@@ -88,7 +91,15 @@ export const UserActionsCreator = {
           });
           Cookies.set('refreshToken', res.refreshToken);
         }
-        dispatch({ type: ActionUserTypes.SET_USER, payload: res.user });
+        console.log(res.user, 'user');
+        if (res.user) {
+          UserActionsCreator.setUser(res.user);
+        }
+        // if (res.user) {
+        //   console.log(res.user, 'user');
+        //   // UserActionsCreator.setUser(res.user);
+        // }
+        // dispatch({ type: ActionUserTypes.SET_USER, payload: res.user });
         dispatch({ type: ActionUserTypes.SET_USERAUTH, payload: true });
         return true;
       } else {
@@ -102,8 +113,9 @@ export const UserActionsCreator = {
         const resToken = await UserActionsCreator.updateToken();
       }
       const response = await patch('/auth/user', form);
-      if (response && response.success) {
-        dispatch({ type: ActionUserTypes.SET_USER, payload: response.user });
+      if (response && response.success && response.user) {
+        UserActionsCreator.setUser(response.user);
+        // dispatch({ type: ActionUserTypes.SET_USER, payload: response.user });
         return true;
       } else {
         return false;
@@ -126,15 +138,25 @@ export const UserActionsCreator = {
       await UserActionsCreator.updateToken();
     }
     const resposnse = await UserActionsCreator.getUser();
-    if (resposnse && resposnse.success) {
-      dispatch({ type: ActionUserTypes.SET_USER, payload: resposnse.user });
+    if (resposnse && resposnse.success && resposnse.user) {
+      UserActionsCreator.setUser(resposnse.user);
+      // dispatch({ type: ActionUserTypes.SET_USER, payload: resposnse.user });
 
       return resposnse;
     } else {
       return { success: false };
     }
   },
-  setUserAuth: (payload: boolean) => (dispatch: Dispatch<UserAction>) => {
-    dispatch({ type: ActionUserTypes.SET_USERAUTH, payload: true });
-  },
+  setUserAuth: (): UserAction => ({
+    type: ActionUserTypes.SET_USERAUTH,
+    payload: true,
+  }),
+  setForgotPassword: (payload: boolean): UserAction => ({
+    type: ActionUserTypes.SET_FORGOT_PASSWORD,
+    payload,
+  }),
+  setUser: (user: IUser): UserAction => ({
+    type: ActionUserTypes.SET_USER,
+    payload: user,
+  }),
 };

@@ -24,6 +24,23 @@ interface SetClearIngredientSelected {
   // payload: { index: number; atIndex: number };
 }
 
+export interface IGetIngredientsSuccess {
+  readonly type: typeof ActionIngredientsTypes.INGREDIENTS_FETCH;
+  readonly payload: Array<ingredientType>;
+}
+export interface IGetIngredientsSelected {
+  readonly type: typeof ActionIngredientsTypes.INGREDIENTS_SELECTED;
+  readonly payload: ingredientType;
+}
+export interface IGetIngredientsCleare {
+  readonly type: typeof ActionIngredientsTypes.CLEAR_INGREDIENTS_SELECTEDS;
+  readonly payload: ingredientType;
+}
+export interface IGetIngredientsError {
+  readonly type: typeof ActionIngredientsTypes.INGREDIENTS_ERROR;
+  readonly payload: boolean;
+}
+
 export type IngredientAction =
   | INGREDIENTS_FETCH
   | SetError

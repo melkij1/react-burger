@@ -33,7 +33,12 @@ function BurgerIngredientSection({
       className={classNames(styles.burgerIngredientSection, 'mt-10')}
       ref={refs()}
     >
-      <div className="title text text_type_main-medium mb-6">{title}</div>
+      <div
+        className="title text text_type_main-medium mb-6"
+        data-test-id="ingredient-name"
+      >
+        {title}
+      </div>
       {ingredients &&
         ingredients.map((ingredient, idx) => (
           <BurgerIngredient

@@ -4,7 +4,7 @@ interface IState {
   orderNumber: number;
   loader: boolean;
 }
-const initialState: IState = {
+export const initialState: IState = {
   orderNumber: 0,
   loader: false,
 };
