@@ -73,21 +73,19 @@ describe('Проверка редьюсера ConstructorReducer', () => {
       initialState,
       allActionCreators.setIngredient(dataItem2Ingredients)
     );
-    console.log(initialState.burderConstructor.ingredients.length, 'rrr');
     const ingredients = [
       { ...dataItem2Ingredients, uuid: '8888' },
       { ...dataItemIngredients, uuid: '8888' },
     ];
-    expect(
-      reducer(
-        initialState,
-        allActionCreators.sortIngredientActions({ index, atIndex })
-      )
-    ).toEqual({
+    const result = reducer(
+      initialState,
+      allActionCreators.sortIngredientActions({ index, atIndex })
+    );
+    expect(result).toEqual({
       ...initialState,
       burderConstructor: {
-        ingredients,
         bun: [],
+        ingredients,
       },
     });
   });
